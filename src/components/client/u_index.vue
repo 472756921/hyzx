@@ -2,44 +2,16 @@
   <div>
     <Row :gutter="24" class="option">
       <Col span="4">
-        <Input v-model="name" placeholder="员工姓名" style="margin-top: -1px">
+        <Input v-model="name" placeholder="用户姓名" style="margin-top: -1px">
           <span slot="append" class="serc" @click="serc">查找</span>
         </Input>
       </Col>
       <Col span="2">
-        <Button class="hy_btn" @click="newEm">新增员工</Button>
-      </Col>
-      <Col span="2"  push="16">
-        <span class="herf_a" @click="lizhi">离职员工</span>
+        <Button class="hy_btn" @click="newEm">新建用户</Button>
       </Col>
     </Row>
     <Table :columns="columns" :data="data"></Table>
 
-    <Modal  v-model="modal1" title="考勤打卡" @on-ok="ok"  >
-      <div>{{date}}</div>
-      <br/>
-      <RadioGroup v-model="kqClass" type="button">
-        <Radio label="1">上班</Radio>
-        <Radio label="2">下班</Radio>
-        <Radio label="3">上班补卡</Radio>
-        <Radio label="4">下班补卡</Radio>
-      </RadioGroup>
-      <br/>
-      <DatePicker v-if="kqClass==3||kqClass==4" type="date" placeholder="选择日期" style="width: 200px;margin-top:20px" :value="bkDate"></DatePicker>
-    </Modal>
-    <Modal  v-model="modal2" title="事件标记" @on-ok="ok"  >
-      <div>{{date}}</div>
-      <br/>
-      <RadioGroup v-model="bjClass" type="button">
-        <Radio label="1">事假</Radio>
-        <Radio label="2">病假</Radio>
-        <Radio label="3">出差</Radio>
-        <Radio label="4">调休</Radio>
-        <Radio label="5">离职</Radio>
-      </RadioGroup>
-      <br/>
-      <DatePicker v-if="bjClass!=5" type="daterange" placement="bottom-end" placeholder="选择日期" style="width: 200px;margin-top:20px" :value="bjDate"></DatePicker>
-    </Modal>
     <Modal  v-model="emac" :title="emclass" @on-ok="ok"  >
       <h3>基础信息</h3>
       <br/>
@@ -71,18 +43,13 @@
         <Radio label="2">三级</Radio>
       </RadioGroup>
     </Modal>
-
-    <Modal  v-model="modal3" title="离职员工列表" width="90%">
-      <Table :columns="columns2" :data="data2"></Table>
-    </Modal>
-
   </div>
 </template>
 
 <script type="text/ecmascript-6">
 
   export default {
-    name: 'e_index',
+    name: 'u_index',
     data () {
       return {
         e_name: '',
@@ -97,16 +64,9 @@
         bjDate: '',
         name: '',
         emac: false,
-        modal1: false,
-        modal2: false,
-        modal3: false,
         bjClass: '',
         kqClass: '',
         columns: [
-          {
-            title: '员工编号',
-            key: 'e_number',
-          },
           {
             title: '姓名',
             key: 'e_name',
@@ -114,10 +74,6 @@
           {
             title: '年龄',
             key: 'e_age'
-          },
-          {
-            title: '类型',
-            key: 'e_type'
           },
           {
             title: '性别',
@@ -132,19 +88,15 @@
             key: 'e_phone'
           },
           {
-            title: '组别',
-            key: 'e_group'
-          },
-          {
             title: '等级',
             key: 'e_class'
           },
           {
-            title: '服务介绍',
+            title: '有效卡',
             key: 'e_skit'
           },
           {
-            title: '入职时间',
+            title: '上次服务时间',
             key: 'e_joinDate'
           },
           {
@@ -167,7 +119,7 @@
                       this.daka(params.index)
                     }
                   }
-                }, '上下班打卡'),
+                }, '创建服务单'),
                 h('Button', {
                   props: {
                     type: 'primary',
@@ -181,7 +133,21 @@
                       this.biaoji(params.index)
                     }
                   }
-                }, '标记'),
+                }, '开卡'),
+                h('Button', {
+                  props: {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.edit(params.index)
+                    }
+                  }
+                }, '修改资料'),
                 h('Button', {
                   props: {
                     type: 'error',
@@ -192,101 +158,31 @@
                       this.edit(params.index)
                     }
                   }
-                }, '编辑')
+                }, '退卡'),
               ]);
             }
           }
         ],
         data: [
           {
-            e_number: 12138,
             e_name: '小黑',
             e_age: 18,
-            e_type: '1',
             e_sex: '女',
             e_idNumber: 510203944839382766,
             e_phone: 17780039283,
-            e_group: '1',
-            e_class: '1',
-            e_skit: '搓澡',
+            e_class: '黄金会员',
+            e_skit: '美白卡（即将到期），抽脂卡',
             e_joinDate: '2014-03-23',
-          },
-        ],
-        columns2: [
-          {
-            title: '员工编号',
-            key: 'e_number',
-          },
-          {
-            title: '姓名',
-            key: 'e_name',
-          },
-          {
-            title: '年龄',
-            key: 'e_age'
-          },
-          {
-            title: '类型',
-            key: 'e_type'
-          },
-          {
-            title: '性别',
-            key: 'e_sex'
-          },
-          {
-            title: '身份证号码',
-            key: 'e_idNumber'
-          },
-          {
-            title: '电话号码',
-            key: 'e_phone'
-          },
-          {
-            title: '组别',
-            key: 'e_group'
-          },
-          {
-            title: '等级',
-            key: 'e_class'
-          },
-          {
-            title: '服务介绍',
-            key: 'e_skit'
-          },
-          {
-            title: '入职时间',
-            key: 'e_joinDate'
-          },
-          {
-            title: '离职时间',
-            key: 'e_OutDate'
-          },
-        ],
-        data2: [
-          {
-            e_number: 12139,
-            e_name: '小白',
-            e_age: 38,
-            e_type: '1',
-            e_sex: '男',
-            e_idNumber: 510203944839382766,
-            e_phone: 17780039283,
-            e_group: '1',
-            e_class: '1',
-            e_skit: '搓澡',
-            e_joinDate: '2014-03-23',
-            e_OutDate: '2015-08-23',
           },
         ],
         date: '',
       }
     },
     created() {
-      setInterval(this.showTime(),1000);
     },
     methods: {
       newEm() {
-        this.emclass = '新增员工';
+        this.emclass = '新增用户';
         this.emac = true;
       },
       edit(index) {
@@ -297,29 +193,16 @@
         this.e_group = this.data[index].e_group;
         this.e_type = this.data[index].e_type;
         this.e_live = this.data[index].e_class;
-        this.emclass = '修改员工';
+        this.emclass = '修改用户';
         this.emac = true;
-      },
-      daka (index) {
-        this.modal1 = true;
-      },
-      biaoji (index) {
-        this.modal2 = true;
-      },
-      showTime() {
-        const nowtime=new Date();
-        this.date = nowtime.toLocaleString();
       },
       ok() {   //
 
       },
-      serc() {    //搜索员工
+      serc() {    //搜索
         if (this.name == '') {
-          this.$Message.warning('请输入员工名字');
+          this.$Message.warning('请输入用户名字');
         }
-      },
-      lizhi() {    //离职员工
-        this.modal3 = true;
       },
       remove (index) {
         this.data6.splice(index, 1);
