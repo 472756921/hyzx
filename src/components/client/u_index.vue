@@ -15,9 +15,9 @@
     <Modal  v-model="emac" :title="emclass" @on-ok="ok"  >
       <h3>基础信息</h3>
       <br/>
-      <Input v-model="e_name" :disabled="emclass=='修改员工'?true:false" ><span slot="prepend">员工姓名</span></Input>
+      <Input v-model="e_name" :disabled="emclass=='修改用户'?true:false" ><span slot="prepend">用户姓名</span></Input>
       <br/>
-      <Input v-model="e_idNumber" :disabled="emclass=='修改员工'?true:false"><span slot="prepend">身份证号</span></Input>
+      <Input v-model="e_idNumber" :disabled="emclass=='修改用户'?true:false"><span slot="prepend">身份证号</span></Input>
       <br/>
       <Input v-model="e_phone"><span slot="prepend">电话号码</span></Input>
       <br/>
