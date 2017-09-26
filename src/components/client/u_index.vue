@@ -15,32 +15,18 @@
     <Modal  v-model="emac" :title="emclass" @on-ok="ok"  >
       <h3>基础信息</h3>
       <br/>
-      <Input v-model="e_name" :disabled="emclass=='修改用户'?true:false" ><span slot="prepend">用户姓名</span></Input>
+      <Input v-model="u_name" :disabled="emclass=='修改用户'?true:false" ><span slot="prepend">用户姓名</span></Input>
       <br/>
-      <Input v-model="e_idNumber" :disabled="emclass=='修改用户'?true:false"><span slot="prepend">身份证号</span></Input>
+      <Input v-model="u_idNumber" :disabled="emclass=='修改用户'?true:false"><span slot="prepend">身份证号</span></Input>
       <br/>
-      <Input v-model="e_phone"><span slot="prepend">电话号码</span></Input>
+      <Input v-model="u_phone"><span slot="prepend">电话号码</span></Input>
       <br/>
-      <Input v-model="e_skit"><span slot="prepend">服务介绍</span></Input>
+      <Input v-model="u_skit"><span slot="prepend">有效卡</span></Input>
       <br/>
-      <h3>类型选择</h3>
-      <br/>
-      <RadioGroup v-model="e_type" type="button">
-        <Radio label="1">技师</Radio>
-        <Radio label="2">按摩师</Radio>
-      </RadioGroup>
-      <br/>
-      <br/>
-      <RadioGroup v-model="e_group" type="button">
-        <Radio label="1">第一组</Radio>
-        <Radio label="2">第二组</Radio>
-      </RadioGroup>
-      <br/>
-      <br/>
-      <RadioGroup v-model="e_live" type="button">
-        <Radio label="1">一级</Radio>
-        <Radio label="2">二级</Radio>
-        <Radio label="2">三级</Radio>
+      <RadioGroup v-model="u_live" type="button">
+        <Radio label="1">普通会员</Radio>
+        <Radio label="2">白银会员</Radio>
+        <Radio label="3">黄金会员</Radio>
       </RadioGroup>
     </Modal>
   </div>
@@ -52,52 +38,48 @@
     name: 'u_index',
     data () {
       return {
-        e_name: '',
-        e_idNumber: '',
-        e_phone: '',
-        e_skit: '',
-        e_group: '',
-        e_live: '',
-        e_type: '',
+        u_name: '',
+        u_idNumber: '',
+        u_phone: '',
+        u_skit: '',
+        u_group: '',
+        u_live: '',
+        u_type: '',
         emclass: '', //新增、修改员工 modal标题
-        bkDate: '',
-        bjDate: '',
         name: '',
         emac: false,
-        bjClass: '',
-        kqClass: '',
         columns: [
           {
             title: '姓名',
-            key: 'e_name',
+            key: 'u_name',
           },
           {
             title: '年龄',
-            key: 'e_age'
+            key: 'u_age'
           },
           {
             title: '性别',
-            key: 'e_sex'
+            key: 'u_sex'
           },
           {
             title: '身份证号码',
-            key: 'e_idNumber'
+            key: 'u_idNumber'
           },
           {
             title: '电话号码',
-            key: 'e_phone'
+            key: 'u_phone'
           },
           {
             title: '等级',
-            key: 'e_class'
+            key: 'u_class'
           },
           {
             title: '有效卡',
-            key: 'e_skit'
+            key: 'u_skit'
           },
           {
             title: '上次服务时间',
-            key: 'e_joinDate'
+            key: 'u_joinDate'
           },
           {
             title: '操作',
@@ -165,14 +147,14 @@
         ],
         data: [
           {
-            e_name: '小黑',
-            e_age: 18,
-            e_sex: '女',
-            e_idNumber: 510203944839382766,
-            e_phone: 17780039283,
-            e_class: '黄金会员',
-            e_skit: '美白卡（即将到期），抽脂卡',
-            e_joinDate: '2014-03-23',
+            u_name: '小黑',
+            u_age: 18,
+            u_sex: '女',
+            u_idNumber: 510203944839382766,
+            u_phone: 17780039283,
+            u_class: '黄金会员',
+            u_skit: '美白卡（即将到期），抽脂卡',
+            u_joinDate: '2014-03-23',
           },
         ],
         date: '',
@@ -186,13 +168,13 @@
         this.emac = true;
       },
       edit(index) {
-        this.e_name = this.data[index].e_name;
-        this.e_phone = this.data[index].e_phone;
-        this.e_idNumber = this.data[index].e_idNumber;
-        this.e_skit = this.data[index].e_skit;
-        this.e_group = this.data[index].e_group;
-        this.e_type = this.data[index].e_type;
-        this.e_live = this.data[index].e_class;
+        this.u_name = this.data[index].u_name;
+        this.u_phone = this.data[index].u_phone;
+        this.u_idNumber = this.data[index].u_idNumber;
+        this.u_skit = this.data[index].u_skit;
+        this.u_group = this.data[index].u_group;
+        this.u_type = this.data[index].u_type;
+        this.u_live = this.data[index].u_class;
         this.emclass = '修改用户';
         this.emac = true;
       },
