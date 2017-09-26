@@ -14,6 +14,11 @@ export default new Router({
       name: 'Hello',
       component: Hello,
       children: [
+        {
+          path: 'employee',
+          name: 'employee',
+          component: e_index,
+        },
       ],
     },
   ]
