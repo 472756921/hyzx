@@ -9,7 +9,7 @@
         <MenuItem name="ser_index"><i class="iconfont icon-barrage"></i>服务单</MenuItem>
         <MenuItem name="employee"><i class="iconfont icon-addressbook"></i>员工管理</MenuItem>
         <MenuItem name="c_index"><i class="iconfont icon-document"></i>投诉管理</MenuItem>
-        <MenuItem name="6"><i class="iconfont icon-createtask"></i>库存管理</MenuItem>
+        <MenuItem name="s_index"><i class="iconfont icon-createtask"></i>库存管理</MenuItem>
         <MenuItem name="7"><i class="iconfont icon-manage"></i>项目管理</MenuItem>
         <MenuItem name="8"><i class="iconfont icon-dynamic"></i>经营报表</MenuItem>
       </Menu>

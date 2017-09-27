@@ -14,23 +14,23 @@
 
     <Modal  v-model="emac" :title="emclass" @on-ok="ok"  >
       <span>用户选择：</span>
-      <Select v-model="model1" filterable style="width:200px" :disabled="emclass=='投诉详情'?true:false">
+      <Select v-model="model1" filterable style="width:200px" :disabled="emclass!='新建投诉'?true:false">
         <Option v-for="item in u_list" :value="item.value" :key="item.value">{{ item.label }}</Option>
       </Select>
       <br/>
       <br/>
       <span>技师选择：</span>
-      <Select v-model="model2" filterable style="width:200px" :disabled="emclass=='投诉详情'?true:false">
+      <Select v-model="model2" filterable style="width:200px" :disabled="emclass!='新建投诉'?true:false">
         <Option v-for="item in e_list" :value="item.value" :key="item.value" >{{ item.label }}</Option>
       </Select>
       <br/>
       <br/>
       <span>投诉内容</span>
-      <Input v-model="model3" type="textarea" :autosize="{minRows: 3,maxRows: 6}"  :readonly="emclass=='投诉详情'?true:false" placeholder="请输入投诉内容..."></Input>
+      <Input v-model="model3" type="textarea" :autosize="{minRows: 3,maxRows: 6}"  :readonly="emclass!='新建投诉'?true:false" placeholder="请输入投诉内容..."></Input>
       <br/>
       <br/>
       <span v-if="emclass=='投诉详情'">解决方案</span>
-      <Input v-if="emclass=='投诉详情'" v-model="model4" type="textarea" :autosize="{minRows: 3,maxRows: 6}"  :readonly="emclass=='投诉详情'?true:false" placeholder="请输入投诉内容..."></Input>
+      <Input v-if="emclass!='新建投诉'" v-model="model4" type="textarea" :autosize="{minRows: 3,maxRows: 6}"  :readonly="emclass=='投诉详情'?true:false" placeholder="请输入投诉内容..."></Input>
     </Modal>
   </div>
 </template>
@@ -198,7 +198,12 @@
         this.data6.splice(index, 1);
       },
       option (index) {
-
+        this.emac = true;
+        this.model1 = this.data[index].u_id;
+        this.model2 = this.data[index].e_id;
+        this.model3 = this.data[index].c_question;
+        this.model4 =  '',
+        this.emclass = '投诉处理';
       },
     }
   };
