@@ -137,7 +137,19 @@
           },
           {
             title: '等级',
-            key: 'e_class'
+            key: 'e_class',
+            render: (h, params) => {
+              if(params.row.e_class == 1){
+                return ("一级");
+              }
+              if(params.row.e_class == 2){
+                return ("二级");
+              }
+              if(params.row.e_class == 3){
+                return ("三级");
+              }
+            }
+
           },
           {
             title: '服务介绍',
