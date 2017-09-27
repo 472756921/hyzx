@@ -41,6 +41,18 @@
       </Select>
       <br/>
       <br/>
+      <span>售前选择：</span>
+      <Select v-model="model1" style="width:200px">
+        <Option v-for="item in e_list" :value="item.value" :key="item.value">{{ item.label }}</Option>
+      </Select>
+      <br/>
+      <br/>
+      <span>售后选择：</span>
+      <Select v-model="model1" style="width:200px">
+        <Option v-for="item in e_list" :value="item.value" :key="item.value">{{ item.label }}</Option>
+      </Select>
+      <br/>
+      <br/>
       <span>房间选择：</span>
       <Select v-model="model2" style="width:200px">
         <Option v-for="item in r_list" :value="item.value" :key="item.value">{{ item.label }}</Option>
@@ -342,12 +354,6 @@
 </script>
 
 <style scoped>
-  .herf_a{
-    font-size: 14px;
-    line-height: 32px;
-    color: #66368C;
-    cursor: pointer;
-  }
   .serc{
     cursor: pointer;
   }

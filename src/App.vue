@@ -15,9 +15,6 @@ export default {
   a:visited {color: #66368C}	/* 已访问的链接 */
   a:hover {color: #66368C}	/* 鼠标移动到链接上 */
   a:active {color: #66368C}
-  .herf_a{
-
-  }
   .prC{
     background-color: #66368C;
   }
@@ -29,6 +26,10 @@ export default {
   .hy_btn{
     background-color: #66368C;
     color: #fff;
+  }
+  .hy_btn:hover {
+    border-color: #66368C;
+    color: #66368C;
   }
   .option{
     padding: 10px 10px 16px;
