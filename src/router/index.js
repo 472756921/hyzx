@@ -9,6 +9,8 @@ import u_index from '@/components/client/u_index'
 
 import ser_index from '@/components/serviceOrders/ser_index'
 
+import c_index from '@/components/complaints/c_index'
+
 Vue.use(Router)
 
 export default new Router({
@@ -32,6 +34,11 @@ export default new Router({
           path: 'ser_index',
           name: 'ser_index',
           component: ser_index,
+        },
+        {
+          path: 'c_index',
+          name: 'c_index',
+          component: c_index,
         },
       ],
     },

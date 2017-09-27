@@ -16,7 +16,7 @@
     <Table :columns="columns" :data="data"></Table>
 
     <Modal  v-model="modal1" title="考勤打卡" @on-ok="ok"  >
-      <div>{{date}}</div>
+      <div>现在时间：{{date}}</div>
       <br/>
       <RadioGroup v-model="kqClass" type="button">
         <Radio label="1">上班</Radio>
@@ -294,7 +294,10 @@
       }
     },
     created() {
-      setInterval(this.showTime(),1000);
+      setInterval(()=>{
+        const nowtime=new Date();
+        this.date = nowtime.toLocaleString();
+      },1000);
     },
     methods: {
       newEm() {
@@ -317,10 +320,6 @@
       },
       biaoji (index) {
         this.modal2 = true;
-      },
-      showTime() {
-        const nowtime=new Date();
-        this.date = nowtime.toLocaleString();
       },
       ok() {   //
 

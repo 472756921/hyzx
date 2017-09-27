@@ -21,7 +21,7 @@
       <br/>
       <Input v-model="u_phone"><span slot="prepend">电话号码</span></Input>
       <br/>
-      <Input v-model="u_skit"><span slot="prepend">有效卡</span></Input>
+      <Input v-model="u_skit"  v-if="emclass=='修改用户'" disabled><span slot="prepend">有效卡</span></Input>
       <br/>
       <RadioGroup v-model="u_live" type="button">
         <Radio label="1">普通会员</Radio>
@@ -302,6 +302,13 @@
       newEm() {
         this.emclass = '新增用户';
         this.emac = true;
+        this.u_name = '';
+        this.u_phone = '';
+        this.u_idNumber = '';
+        this.u_skit = '';
+        this.u_group = '';
+        this.u_type = '';
+        this.u_live = '';
       },
       edit(index) {
         this.u_name = this.data[index].u_name;
