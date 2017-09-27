@@ -93,7 +93,7 @@
                     },
                     on: {
                       click: () => {
-                        this.show(params.index)
+                        this.option(params.index)
                       }
                     }
                   }, '处理'),
@@ -196,6 +196,9 @@
       },
       remove (index) {
         this.data6.splice(index, 1);
+      },
+      option (index) {
+
       },
     }
   };
