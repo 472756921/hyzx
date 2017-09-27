@@ -13,6 +13,8 @@ import c_index from '@/components/complaints/c_index'
 
 import s_index from '@/components/stock/s_index'
 
+import p_index from '@/components/project/p_index'
+
 Vue.use(Router)
 
 export default new Router({
@@ -46,6 +48,11 @@ export default new Router({
           path: 's_index',
           name: 's_index',
           component: s_index,
+        },
+        {
+          path: 'p_index',
+          name: 'p_index',
+          component: p_index,
         },
       ],
     },

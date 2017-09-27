@@ -80,26 +80,6 @@
             c_sp: '阿拉伯半岛',
           },
         ],
-        u_list: [
-          {
-            value: '1',
-            label: '刘德华',
-          },
-          {
-            value: '2',
-            label: '王小虎',
-          },
-        ],
-        e_list: [
-          {
-            value: '1',
-            label: '小黑'
-          },
-          {
-            value: '2',
-            label: '小白'
-          },
-        ],
       }
     },
     created() {
