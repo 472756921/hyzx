@@ -14,7 +14,7 @@
       </Col>
     </Row>
 
-    <div class="title">上一次盘点情况</div>
+    <div class="title">上一次盘点情况(实时库存)</div>
 
     <Table :columns="columns" :data="data"></Table>
 

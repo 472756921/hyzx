@@ -4,14 +4,14 @@
       <Col span="3" class="layout-menu-left">
       <Menu active-name="1-2" theme="light" width="auto" :open-names="['1']" @on-select="go">
         <div class="layout-logo-left">华扬咨询</div>
-        <MenuItem name="1"><i class="iconfont icon-clock"></i>预约管理</MenuItem>
+        <MenuItem name="re_index"><i class="iconfont icon-clock"></i>预约管理</MenuItem>
         <MenuItem name="u_index"><i class="iconfont icon-businesscard"></i>用户管理</MenuItem>
         <MenuItem name="ser_index"><i class="iconfont icon-barrage"></i>服务单</MenuItem>
         <MenuItem name="employee"><i class="iconfont icon-addressbook"></i>员工管理</MenuItem>
         <MenuItem name="c_index"><i class="iconfont icon-document"></i>投诉管理</MenuItem>
         <MenuItem name="s_index"><i class="iconfont icon-createtask"></i>库存管理</MenuItem>
         <MenuItem name="p_index"><i class="iconfont icon-manage"></i>项目管理</MenuItem>
-        <MenuItem name="8"><i class="iconfont icon-dynamic"></i>经营报表</MenuItem>
+        <MenuItem name="r_index"><i class="iconfont icon-dynamic"></i>经营报表</MenuItem>
       </Menu>
       </Col>
       <Col span="21">

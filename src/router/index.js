@@ -15,6 +15,10 @@ import s_index from '@/components/stock/s_index'
 
 import p_index from '@/components/project/p_index'
 
+import r_index from '@/components/report/r_index'
+
+import re_index from '@/components/reservation/re_index'
+
 Vue.use(Router)
 
 export default new Router({
@@ -53,6 +57,16 @@ export default new Router({
           path: 'p_index',
           name: 'p_index',
           component: p_index,
+        },
+        {
+          path: 'r_index',
+          name: 'r_index',
+          component: r_index,
+        },
+        {
+          path: 're_index',
+          name: 're_index',
+          component: re_index,
         },
       ],
     },
