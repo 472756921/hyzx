@@ -127,10 +127,6 @@
             key: 'u_sex'
           },
           {
-            title: '身份证号码',
-            key: 'u_idNumber'
-          },
-          {
             title: '电话号码',
             key: 'u_phone'
           },
@@ -148,14 +144,6 @@
                 return ("黄金会员");
               }
             }
-          },
-          {
-            title: '有效卡',
-            key: 'u_skit'
-          },
-          {
-            title: '上次服务时间',
-            key: 'u_joinDate'
           },
           {
             title: '操作',
@@ -188,35 +176,10 @@
                   },
                   on: {
                     click: () => {
-                      this.card(params.index, 1)
-                    }
-                  }
-                }, '开卡'),
-                h('Button', {
-                  props: {
-                    type: 'primary',
-                    size: 'small'
-                  },
-                  style: {
-                    marginRight: '5px'
-                  },
-                  on: {
-                    click: () => {
                       this.edit(params.index)
                     }
                   }
-                }, '修改资料'),
-                h('Button', {
-                  props: {
-                    type: 'error',
-                    size: 'small'
-                  },
-                  on: {
-                    click: () => {
-                      this.card(params.index, 2)
-                    }
-                  }
-                }, '退卡'),
+                }, '详细'),
               ]);
             }
           }

@@ -10,39 +10,37 @@
     </Row>
     <div id='calendar'></div>
 
-    <Modal v-model="model1" title="新建预约" @on-ok="ok" @on-cancel="cancel">
-      <div>预约时间</div>
-      <DatePicker type="datetime" v-model="newDate" placeholder="选择预约日期和时间" style="width: 200px"></DatePicker>
+    <Modal v-model="model1" title="新建预约" @on-ok="ok">
+      <div>开始时间</div>
+      <DatePicker type="datetime" v-model="newDate" placeholder="选择预约日期和时间" :options="options" style="width: 200px"></DatePicker>
       <br/>
       <br/>
-      <div>服务时长</div>
-      <Select v-model="model4" style="width:200px">
-        <Option value="0.5">0.5小时</Option>
-        <Option value="1">1小时</Option>
-        <Option value="1.5">1.5小时</Option>
-        <Option value="2">2小时</Option>
-        <Option value="2.5">2.5小时</Option>
-        <Option value="3">3小时</Option>
-        <Option value="3.5">3.5小时</Option>
-      </Select>
+      <div>结束时间</div>
+      <DatePicker type="datetime" v-model="newDate2" placeholder="选择预约日期和时间" :options="options" style="width: 200px"></DatePicker>
       <br/>
       <br/>
-      <div>服务技师</div>
+      <div>服务项目</div>
       <Select v-model="model2" style="width:200px">
-        <Option v-for="item in e_list" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        <Option v-for="(item, i) in e_list" :value="item.value" :key="i">{{ item.label }}</Option>
       </Select>
       <br/>
       <br/>
       <div>服务房间</div>
       <Select v-model="model3" style="width:200px">
-        <Option v-for="item in r_list" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        <Option v-for="(item, i) in r_list" :value="item.value" :key="i">{{ item.label }}</Option>
       </Select>
+      <br/>
+      <br/>
+      <div>用户</div>
+      <Input v-model="model4" placeholder="请输入用户电话号码"  style="width:200px"><Button slot="append" icon="ios-search" @click="sercUser"></Button></Input>
+      <div style="margin: 6px 0">{{userInfo}}</div>
+      <br/>
+      <Button v-if="transformF" type="success">生成服务单</Button>
     </Modal>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
-//  import fullCalendar from '../../../static/fullcalendar.min';
   import scheduler from '../../../static/scheduler.min';
 
   export default {
@@ -50,46 +48,47 @@
     data () {
       return {
         newDate: '',
+        newDate2: '',
         model1: false,
-        newDate: '',
         model2: '',
         model3: '',
         model4: '',
+        userInfo: '',
         date: '',
-        e_list: [
-          {
-            value: '1',
-            label: '技师 A',
-          },
-          {
-            value: '2',
-            label: '技师 B',
-          },
-        ],
-        r_list: [
-          {
-            value: '1',
+        transformF: false,
+        e_list: [{
+            value: '美白',
+            label: '美白',
+          },{
+            value: '嫩肤',
+            label: '嫩肤',
+        },],
+        r_list: [{
+            value: 301,
             label: '301',
-          },
-          {
-            value: '2',
+          },{
+            value: 302,
             label: '302',
-          },
-        ],
+        },],
+        options: {
+          disabledDate (date) {
+            return date && date.valueOf() < Date.now() - 86400000;
+          }
+        },
         events: [
-          { id: '1', resourceId: 'a', start: '2017-09-30 09:00', end: '2017-09-30 10:00', title: '302/刘德华/护理',color: '#F6D600', textColor: '#666', },
-          { id: '11', resourceId: 'a', start: '2017-09-30 10:30', end: '2017-09-30 11:30', title: '302/刘德华/护理',color: '#38925E', textColor: '#eee', },
-          { id: '12', resourceId: 'a', start: '2017-09-30 11:30', end: '2017-09-30 13:00', title: '302/刘德华/护理',color: '#ff0000', textColor: '#eee', },
-          { id: '13', resourceId: 'a', start: '2017-09-30 14:00', end: '2017-09-30 16:00', title: '302/刘德华/护理',color: '#38925E', textColor: '#eee', },
-          { id: '13', resourceId: 'a', start: '2017-09-30 18:00', end: '2017-09-30 19:30', title: '302/刘德华/护理',color: '#38925E', textColor: '#eee', },
+          { id: '1', resourceId: 'a', start: '2017-10-27 09:00', end: '2017-10-27 10:00', title: '302/刘德华/护理',color: '#F6D600', textColor: '#666', },
+          { id: '11', resourceId: 'a', start: '2017-10-27 10:30', end: '2017-10-27 11:30', title: '302/刘德华/护理',color: '#38925E', textColor: '#eee', },
+          { id: '12', resourceId: 'a', start: '2017-10-27 11:30', end: '2017-10-27 13:00', title: '302/刘德华/护理',color: '#ff0000', textColor: '#eee', },
+          { id: '13', resourceId: 'a', start: '2017-10-27 14:00', end: '2017-10-27 16:00', title: '302/刘德华/护理',color: '#38925E', textColor: '#eee', },
+          { id: '13', resourceId: 'a', start: '2017-10-27 18:00', end: '2017-10-27 19:30', title: '302/刘德华/护理',color: '#38925E', textColor: '#eee', },
 
-          { id: '2', resourceId: 'b', start: '2017-09-30 07:00', end: '2017-09-30 09:00', title: '302/刘德华/护理',color: '#F6D600', textColor: '#666', },
-          { id: '21', resourceId: 'b', start: '2017-09-30 10:30', end: '2017-09-30 11:30', title: '302/刘德华/护理',color: '#38925E', textColor: '#eee', },
-          { id: '22', resourceId: 'b', start: '2017-09-30 14:00', end: '2017-09-30 15:00', title: '302/刘德华/护理',color: '#ff0000', textColor: '#eee', },
-          { id: '23', resourceId: 'b', start: '2017-09-30 20:00', end: '2017-09-30 21:00', title: '302/刘德华/护理',color: '#38925E', textColor: '#eee', },
+          { id: '2', resourceId: 'b', start: '2017-10-27 07:00', end: '2017-10-27 09:00', title: '302/刘德华/护理',color: '#F6D600', textColor: '#666', },
+          { id: '21', resourceId: 'b', start: '2017-10-27 10:30', end: '2017-10-27 11:30', title: '302/刘德华/护理',color: '#38925E', textColor: '#eee', },
+          { id: '22', resourceId: 'b', start: '2017-10-27 14:00', end: '2017-10-27 15:00', title: '302/刘德华/护理',color: '#ff0000', textColor: '#eee', },
+          { id: '23', resourceId: 'b', start: '2017-10-28 09:00', end: '2017-10-28 11:00', title: '302/刘德华/护理',color: '#38925E', textColor: '#eee', },
 
-          { id: '5', resourceId: 'e', start: '2017-09-30 07:00', end: '2017-09-30 22:00', title: '休假' },
-          { id: '5', resourceId: 'f', start: '2017-09-30 07:00', end: '2017-09-30 22:00', title: '休假' },
+          { id: '5', resourceId: 'e', start: '2017-10-28 07:00', end: '2017-10-28 22:00', title: '休假' },
+          { id: '5', resourceId: 'f', start: '2017-10-28 07:00', end: '2017-10-28 22:00', title: '休假' },
         ],
       }
     },
@@ -115,7 +114,7 @@
         header: {
           left: 'prev,next today',
           center: 'title',
-          right: 'agendaDay,agendaTwoDay,agendaWeek,month'
+          right: 'agendaDay'
         },
         resources: [
           { id: 'a', title: '技师 A' },
@@ -126,28 +125,47 @@
           { id: 'f', title: '技师 F', eventColor: '#eee', eventTextColor: '#333' },
         ],
         events: this.events,
+        eventClick: (calEvent, jsEvent, view)=>{
+          if(calEvent.title == "休假") {
+            return false;
+          }
+          this.transformF = true;
+          this.model1 = true;
+          console.log(calEvent);
+        },
       });
     },
     created() {
       this.showData = this.data;
     },
     methods: {
+      sercUser(){
+        this.userInfo = '已经找到用户 刘德华';
+      },
       newyy() {
         this.model1 = true;
+        this.newDate = '';
+        this.newDate2 = '';
+        this.model2 = '';
+        this.model3 = '';
+        this.model4 = '';
+        this.transformF = false;
       },
-      cancel() {},
       ok() {
-        this.events = [...this.events,
-          {
+        if( this.newDate == '' ||  this.newDate2 == '' || this.model2 == '' || this.model3 == '' || this.model4 == '') {
+          this.$Message.error('请完整填写预约信息');
+          return false
+        }
+        const events = {
             id: '23',
             resourceId: 'c',
-            start: '2017-09-30 20:00',
-            end: '2017-09-30 21:00',
-            title: '302/刘德华/护理',
+            start: this.newDate,
+            end: this.newDate2,
+            title: this.model2 + '/' +this.model3 + '/' +this.model4,
             color: '#38925E',
             textColor: '#eee',
-          }];
-//        $('#calendar').fullCalendar( 'renderEvent', event [{ id: '5',source:'', resourceId: 'e', start: '2017-09-30 07:00', end: '2017-09-30 22:00', title: '休假' }]);
+          };
+        $('#calendar').fullCalendar( 'renderEvent', events, true);
       },
     }
   };
