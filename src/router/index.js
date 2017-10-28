@@ -6,6 +6,7 @@ import Hello from '@/components/Hello'
 import e_index from '@/components/employee/e_index'
 
 import u_index from '@/components/client/u_index'
+import u_datile from '@/components/client/u_datile'
 
 import ser_index from '@/components/serviceOrders/ser_index'
 
@@ -37,6 +38,11 @@ export default new Router({
           path: 'u_index',
           name: 'u_index',
           component: u_index,
+        },
+        {
+          path: 'u_datile/:u_id',
+          name: 'u_datile',
+          component: u_datile,
         },
         {
           path: 'ser_index',

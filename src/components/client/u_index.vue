@@ -186,6 +186,7 @@
         ],
         data: [
           {
+            u_id: 12,
             u_name: '小黑',
             u_age: 18,
             u_sex: '女',
@@ -274,15 +275,7 @@
         this.u_live = '';
       },
       edit(index) {
-        this.u_name = this.data[index].u_name;
-        this.u_phone = this.data[index].u_phone;
-        this.u_idNumber = this.data[index].u_idNumber;
-        this.u_skit = this.data[index].u_skit;
-        this.u_group = this.data[index].u_group;
-        this.u_type = this.data[index].u_type;
-        this.u_live = this.data[index].u_class;
-        this.emclass = '修改用户';
-        this.emac = true;
+        this.$router.push({path:'u_datile/'+this.data[index].u_id});
       },
       ok() {   //
 
