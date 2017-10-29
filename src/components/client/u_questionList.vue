@@ -73,6 +73,10 @@
                 },
                 on: {
                   click: () => {
+                    if(params.row.status == 1){
+                      this.$Message.warning('该疗程已经完成');
+                      return false;
+                    }
                     this.operating(params.index)
                   }
                 }
@@ -84,7 +88,7 @@
           {date: '2012-12-12', question: '皮肤暗沉', resti: 1, status: 1},
           {date: '2012-12-12', question: '眼部皮肤松弛', resti: 2, status: 0},
           {date: '2012-12-12', question: '眼袋', resti: 3, status: 1},
-          {date: '2012-12-12', question: '黄褐斑', resti: 0, status: 1},
+          {date: '2012-12-12', question: '黄褐斑', resti: 0, status: 0},
         ],
       }
     },
