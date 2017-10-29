@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Table :columns="service" :data="serviceData"></Table>
+    <Table :columns="shop" :data="shopData" :row-class-name="rowClassName"></Table>
   </div>
 </template>
 
@@ -9,59 +9,31 @@
     name: 'u_shopList',
     data(){
       return {
-        service: [
+        shop: [
           {key: 'date', title: '日期'},
-          {key: 'number', title: '服务单号'},
-          {key: 'e_name', title: '技师'},
-          {key: 'room', title: '房间'},
-          {
-            key: 'zd', title: '是否指定', render: (h, p)=> {
-            if (p.zd == 1) {
-              return '指定'
-            } else {
-              return '非指定'
-            }
-          }
-          },
-          {
-            key: 'pay_way', title: '支付方式', render: (h, p)=> {
-            if (p.pay_way == 1) {
-              return '卡扣'
-            } else {
-              return '现金'
-            }
-          }
-          },
-          {
-            title: '操作',
-            key: 'action',
-            render: (h, params) => {
-              return h('div', [h('Button', {
-                props: {
-                  type: 'primary',
-                  size: 'small'
-                },
-                style: {
-                  marginRight: '5px'
-                },
-                on: {
-                  click: () => {
-                    this.datile(params.index)
-                  }
-                }
-              }, '详细'),
-              ]);
-            }
-          },
+          {key: 'price', title: '金额'},
+          {key: 'status', title: '行为', render:(h, p)=>{if(p.row.status === 1){return '充值'}else if(p.row.status === 2 ){return '购买产品'} else if(p.row.status === 0 ) {return '退款'}}},
+          {key: 'p_name', title: '产品'},
         ],
-        serviceData: [
-          {date: '2012-12-12', e_name: '张小泉', zd: 1, pay_way: 1, room: 203, number: 123123},
+        shopData: [
+          {date: '2012-12-12', status: 2, price: 12000, p_name: '梨花膏'},
+          {date: '2012-12-12', status: 1, price: 12000, p_name: '储值卡'},
+          {date: '2012-12-12', status: 0, price: 12000, p_name: '储值卡'},
         ],
+      }
+    },
+    methods: {
+      rowClassName(r) {
+        if(r.status == 0){
+          return 'redBack';
+        }
       }
     },
   };
 </script>
 
-<style scoped>
-
+<style>
+  .ivu-table .redBack td{
+    background-color: #fff4f3;
+  }
 </style>

@@ -6,10 +6,8 @@
     <br/>
     <Tabs value="name1">
       <TabPane label="服务记录" name="name1">
-        <Table :columns="service" :data="serviceData"></Table>
       </TabPane>
       <TabPane label="消费记录(现金)" name="name2">
-        <Table :columns="shop" :data="shopData" :row-class-name="rowClassName"></Table>
       </TabPane>
       <TabPane label="问题分析" name="name3">
         <Table :columns="question" :data="questionData"></Table>
@@ -156,17 +154,9 @@
       };
     },
     methods: {
-      rowClassName(r) {
-        if(r.status == 0){
-          return 'redBack';
-        }
-      }
     },
   };
 </script>
 
-<style>
-  .ivu-table .redBack td{
-    background-color: #fff4f3;
-  }
+<style scoped>
 </style>
