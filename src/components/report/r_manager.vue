@@ -7,7 +7,7 @@
 
 <script type="text/ecmascript-6">
   export default {
-    name: 'r_day',
+    name: 'r_manager',
     data () {
       return {
         name: '',
@@ -41,7 +41,7 @@
 //                        this.edit(params.index, 1)
                     }
                   }
-                }, '详情'),
+                }, '下载'),
               ]);
             }
           }
@@ -50,7 +50,7 @@
         data: [
           {
             r_type: '经营报表',
-            r_date: '2015-12-12',
+            r_date: '2015-12',
           },
         ],
       }
