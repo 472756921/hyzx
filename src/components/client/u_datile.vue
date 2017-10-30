@@ -9,6 +9,7 @@
       <TabPane label="消费记录(现金)" name="name2"><shopList/></TabPane>
       <TabPane label="问题分析" name="name3"><questionList/></TabPane>
       <TabPane label="现有卡情况" name="name4"><cardList/></TabPane>
+      <TabPane label="计划图" name="name5"><uplan/></TabPane>
     </Tabs>
   </div>
 </template>
@@ -18,10 +19,11 @@
   import shopList from './u_shopList.vue';
   import questionList from './u_questionList.vue';
   import cardList from './u_cardList.vue';
+  import uplan from './u_plan.vue';
 
   export default {
     name: 'u_datile',
-    components: { serviceList, shopList, questionList, cardList},
+    components: { serviceList, shopList, questionList, cardList, uplan},
     data(){
       return {
       };

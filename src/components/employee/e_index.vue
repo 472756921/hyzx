@@ -13,7 +13,7 @@
         <span class="herf_a" @click="lizhi">离职员工</span>
       </Col>
     </Row>
-    <Table :columns="columns" :data="data"></Table>
+    <Table :columns="columns" :data="data" :row-class-name="rowClassName"></Table>
 
     <Modal  v-model="modal1" title="考勤打卡" @on-ok="ok"  >
       <div>现在时间：{{date}}</div>
@@ -117,15 +117,22 @@
           },
           {
             title: '类型',
-            key: 'e_type'
+            key: 'e_type',
+            render: (h, params) => {
+              if(params.row.e_type == 1){
+                return ("洗脚师");
+              }
+              if(params.row.e_type == 2){
+                return ("按摩师");
+              }
+              if(params.row.e_type == 3){
+                return ("洗头师");
+              }
+            }
           },
           {
             title: '性别',
             key: 'e_sex'
-          },
-          {
-            title: '身份证号码',
-            key: 'e_idNumber'
           },
           {
             title: '电话号码',
@@ -149,20 +156,41 @@
                 return ("三级");
               }
             }
-
           },
           {
-            title: '服务介绍',
-            key: 'e_skit'
-          },
-          {
-            title: '入职时间',
-            key: 'e_joinDate'
+            title: '今日状态',
+            key: 'e_status',
+            render: (h, params) => {
+              if(params.row.e_status == 1){
+                return ("上班中");
+              }
+              if(params.row.e_status == 0){
+                return ("已下班");
+              }
+              if(params.row.e_status == 2){
+                return ("迟到");
+              }
+              if(params.row.e_status == 3){
+                return ("旷工");
+              }
+              if(params.row.e_status == 4){
+                return ("调休");
+              }
+              if(params.row.e_status == 5){
+                return ("事假");
+              }
+              if(params.row.e_status == 6){
+                return ("病假");
+              }
+              if(params.row.e_status == 7){
+                return ("早退");
+              }
+            }
           },
           {
             title: '操作',
             key: 'action',
-            width: 300,
+            width: 220,
             align: 'center',
             render: (h, params) => {
               return h('div', [
@@ -221,6 +249,105 @@
             e_group: '1',
             e_class: '1',
             e_skit: '搓澡',
+            e_status: 1,
+            e_joinDate: '2014-03-23',
+          },
+          {
+            e_number: 12138,
+            e_name: '小黑',
+            e_age: 18,
+            e_type: '1',
+            e_sex: '女',
+            e_idNumber: 510203944839382766,
+            e_phone: 17780039283,
+            e_group: '1',
+            e_class: '1',
+            e_skit: '搓澡',
+            e_status: 0,
+            e_joinDate: '2014-03-23',
+          },
+          {
+            e_number: 12138,
+            e_name: '小黑',
+            e_age: 18,
+            e_type: '1',
+            e_sex: '女',
+            e_idNumber: 510203944839382766,
+            e_phone: 17780039283,
+            e_group: '1',
+            e_class: '1',
+            e_skit: '搓澡',
+            e_status: 2,
+            e_joinDate: '2014-03-23',
+          },
+          {
+            e_number: 12138,
+            e_name: '小黑',
+            e_age: 18,
+            e_type: '1',
+            e_sex: '女',
+            e_idNumber: 510203944839382766,
+            e_phone: 17780039283,
+            e_group: '1',
+            e_class: '1',
+            e_skit: '搓澡',
+            e_status: 3,
+            e_joinDate: '2014-03-23',
+          },
+          {
+            e_number: 12138,
+            e_name: '小黑',
+            e_age: 18,
+            e_type: '1',
+            e_sex: '女',
+            e_idNumber: 510203944839382766,
+            e_phone: 17780039283,
+            e_group: '1',
+            e_class: '1',
+            e_skit: '搓澡',
+            e_status: 4,
+            e_joinDate: '2014-03-23',
+          },
+          {
+            e_number: 12138,
+            e_name: '小黑',
+            e_age: 18,
+            e_type: '1',
+            e_sex: '女',
+            e_idNumber: 510203944839382766,
+            e_phone: 17780039283,
+            e_group: '1',
+            e_class: '1',
+            e_skit: '搓澡',
+            e_status: 5,
+            e_joinDate: '2014-03-23',
+          },
+          {
+            e_number: 12138,
+            e_name: '小黑',
+            e_age: 18,
+            e_type: '1',
+            e_sex: '女',
+            e_idNumber: 510203944839382766,
+            e_phone: 17780039283,
+            e_group: '1',
+            e_class: '1',
+            e_skit: '搓澡',
+            e_status: 6,
+            e_joinDate: '2014-03-23',
+          },
+          {
+            e_number: 12138,
+            e_name: '小黑',
+            e_age: 18,
+            e_type: '1',
+            e_sex: '女',
+            e_idNumber: 510203944839382766,
+            e_phone: 17780039283,
+            e_group: '1',
+            e_class: '1',
+            e_skit: '搓澡',
+            e_status: 7,
             e_joinDate: '2014-03-23',
           },
         ],
@@ -239,7 +366,18 @@
           },
           {
             title: '类型',
-            key: 'e_type'
+            key: 'e_type',
+            render: (h, params) => {
+              if(params.row.e_type == 1){
+                return ("洗脚师");
+              }
+              if(params.row.e_type == 2){
+                return ("按摩师");
+              }
+              if(params.row.e_type == 3){
+                return ("洗头师");
+              }
+            }
           },
           {
             title: '性别',
@@ -259,7 +397,18 @@
           },
           {
             title: '等级',
-            key: 'e_class'
+            key: 'e_class',
+            render: (h, params) => {
+              if(params.row.e_class == 1){
+                return ("一级");
+              }
+              if(params.row.e_class == 2){
+                return ("二级");
+              }
+              if(params.row.e_class == 3){
+                return ("三级");
+              }
+            }
           },
           {
             title: '服务介绍',
@@ -302,7 +451,34 @@
     methods: {
       newEm() {
         this.emclass = '新增员工';
+        this.e_name = '';
+        this.e_phone = '';
+        this.e_idNumber = '';
+        this.e_skit ='';
+        this.e_group = '';
+        this.e_type = '';
+        this.e_live = '';
         this.emac = true;
+      },
+      rowClassName(r) {
+        if(r.e_status == 2) {
+          return 'cd';
+        }
+        if(r.e_status == 3) {
+          return 'kg';
+        }
+        if(r.e_status == 4) {
+          return 'sj';
+        }
+        if(r.e_status == 5) {
+          return 'sj';
+        }
+        if(r.e_status == 6) {
+          return 'sj';
+        }
+        if(r.e_status == 7) {
+          return 'cd';
+        }
       },
       edit(index) {
         this.e_name = this.data[index].e_name;
@@ -339,7 +515,7 @@
   };
 </script>
 
-<style scoped>
+<style>
   .herf_a{
     font-size: 14px;
     line-height: 32px;
@@ -348,5 +524,17 @@
   }
   .serc{
     cursor: pointer;
+  }
+  .ivu-table .cd td{
+    background-color: #eee;
+  }
+  .ivu-table .kg td{
+    background-color: #FFEEE4;
+  }
+  .ivu-table .sj td{
+    background-color: #D8E6E7;
+  }
+  .ivu-table .tx td{
+    background-color: #d9e1e8;
   }
 </style>

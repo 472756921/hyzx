@@ -1,6 +1,7 @@
 <template>
   <div>
     <Table :columns="shop" :data="shopData" :row-class-name="rowClassName"></Table>
+    <Page :current="2" :total="50" simple class="center"></Page>
   </div>
 </template>
 
@@ -35,5 +36,9 @@
 <style>
   .ivu-table .redBack td{
     background-color: #fff4f3;
+  }
+  .center{
+    margin: 10px auto;
+    text-align: center;
   }
 </style>

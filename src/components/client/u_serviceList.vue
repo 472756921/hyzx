@@ -1,6 +1,7 @@
 <template>
   <div>
     <Table :columns="service" :data="serviceData"></Table>
+    <Page :current="2" :total="50" simple class="center"></Page>
     <Modal v-model="model1" title="服务详情">
       <div>开始时间：{{startDate}}</div>
       <br/>
@@ -108,5 +109,8 @@
 </script>
 
 <style scoped>
-
+  .center{
+    margin: 10px auto;
+    text-align: center;
+  }
 </style>

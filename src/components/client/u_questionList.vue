@@ -1,9 +1,10 @@
 <template>
-  <div>
+  <div style="padding: 2px">
     <Button type="info" @click="newqu">添加问题</Button>
     <br/>
     <br/>
-    <Table :columns="question" :data="questionData"></Table>
+    <Table :columns="question" :data="questionData" style="width: 100%;margin: 0!important;"></Table>
+    <Page :current="2" :total="50" simple class="center"></Page>
     <Modal v-model="wayf" title="解决方案">
       <RadioGroup v-model="radio">
         <Radio label="1" :disabled="waysF">基础方案</Radio>
@@ -129,5 +130,9 @@
 <style>
   .ivu-table .redBack td{
     background-color: #fff4f3;
+  }
+  .center{
+    margin: 10px auto;
+    text-align: center;
   }
 </style>

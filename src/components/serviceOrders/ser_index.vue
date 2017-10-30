@@ -26,6 +26,14 @@
                 <span class="orderLititle">顾客姓名：</span>
                 <span class="orderLiCon">{{ item.u_name }}</span>
               </Col>
+              <Col  span="8">
+                <span class="orderLititle">顾客电话：</span>
+                <span class="orderLiCon">{{ item.phone }}</span>
+              </Col>
+              <Col  span="8">
+                <span class="orderLititle">顾客等级：</span>
+                <span class="orderLiCon">{{ item.live==0?'非会员':item.live==1?'普通会员':item.live==2?'白银会员':'黄金会员' }}</span>
+              </Col>
               <Col span="8">
                 <span class="orderLititle">服务技师：</span>
                 <span class="orderLiCon">{{ item.servicer }}</span>
@@ -58,7 +66,7 @@
           </div>
           <div class="prtotle">合计：<span class="price" style="font-size: 16px">￥{{ item.totle }}</span></div>
           <div  style="width: 25%;margin: 0 auto">
-            <Button  class="hy_btn">结算</Button>
+            <Button  class="hy_btn" @click="settlement">结算</Button>
             <Button type="ghost" @click="edit(i)">编辑</Button>
           </div>
         </div>
@@ -131,6 +139,14 @@
         <span v-for="item in model9">{{ item.label }} <span class="price" >￥{{ item.price }}</span>&nbsp;&nbsp;</span>
       </div>
     </Modal>
+
+    <Modal  v-model="settlementF" title="结算" @on-ok="sok">
+      <div>您正在结算服务单，点击确认后将打印单据，请保持打印机连接畅通</div>
+      <RadioGroup v-model="disabledGroup">
+        <Radio label="现金单"></Radio>
+        <Radio label="非现金单"></Radio>
+      </RadioGroup>
+    </Modal>
   </div>
 </template>
 
@@ -139,11 +155,13 @@
     name: 'ser_index',
     data() {
       return {
+        disabledGroup: '非现金单',
         serCard: '创建服务单',
         serser: '',
         serviceDate: '',
         service: false,
         single: false,
+        settlementF: false,
         model1: '',
         model2: '',
         model3: '',
@@ -211,6 +229,8 @@
           {
             orderClass: 1,
             orderNumber: '123123232',
+            live: 1,
+            phone: 12211121212,
             date: '2017-12-12',
             u_name: '王小虎',
             u_id: '2',
@@ -253,9 +273,11 @@
           {
             orderClass: 2,
             orderNumber: '123123232',
+            phone: 12211121212,
             date: '2017-12-12',
             u_name: '刘德华',
             u_id: '1',
+            live: 1,
             servicer: '小黑',
             e_id: '1',
             servicerIS: 1,
@@ -336,6 +358,15 @@
         this.model8 = tem.p_name;
         this.model9 = tem.pr_list;
         this.serviceDate = tem.date;
+      },
+      settlement() {
+        this.settlementF = true;
+      },
+      sok() {
+        var r=confirm("您确定结算该 "+this.disabledGroup+" ？")
+        if(r) {
+          this.$Message.info({content:'结算完成，请用户签字', duration: 3});
+        }
       },
     },
   };
