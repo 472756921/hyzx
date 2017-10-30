@@ -7,11 +7,18 @@
         </Input>
         </Col>
         <Col span="2">
-        <Button class="hy_btn" @click="newEm">新增入库</Button>
+          <Button class="hy_btn" @click="newEm">新增入库</Button>
+        </Col>
+        <Col span="2">
+          <Button class="hy_btn" @click="repot">入库记录</Button>
+        </Col>
+        <Col span="2">
+          <Button class="hy_btn" @click="repot">出库记录</Button>
         </Col>
       </Row>
       <br/>
       <Table :columns="columns" :data="data"></Table>
+      <Page :current="2" :total="50" simple class="center"></Page>
 
       <Modal  v-model="emac" title="新增入库" @on-ok="ok"  >
         <Input v-model="p_name">
@@ -47,7 +54,7 @@
 
 <script type="text/ecmascript-6">
     export default {
-        name: 's_big',
+      name: 's_big',
       data () {
         return {
           m_id:'',
@@ -146,6 +153,9 @@
         ok() {   //
 
         },
+        repot() {   //
+
+        },
         serc() {    //搜索
           if (this.name == '') {
             this.$Message.warning('请输入名称');
@@ -163,6 +173,10 @@
     font-size: 18px;
     margin: 14px 0;
     color: #66368C;
+  }
+  .center{
+    margin: 10px auto;
+    text-align: center;
   }
 
 </style>

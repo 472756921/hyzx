@@ -6,29 +6,28 @@
           <span slot="append" class="serc" @click="serc">查找</span>
         </Input>
       </Col>
-      <Col span="2">
-        <Button class="hy_btn" @click="newEm">新建项目</Button>
-      </Col>
     </Row>
 
     <Table :columns="columns" :data="data"></Table>
 
-    <Modal  v-model="emac" :title="emacs" @on-ok="ok"  >
-      <Input v-model="p_name">
-        <span slot="prepend">项目名称</span>
-      </Input>
+    <Modal  v-model="emac" title="项目信息" @on-ok="ok"  >
+      <div>项目编号：{{index.p_number}}</div>
       <br/>
-      <Input v-model="p_number">
-        <span slot="prepend">项目类型</span>
-      </Input>
+      <div>项目名称：{{index.p_name}}</div>
       <br/>
-      <Input v-model="p_time">
-        <span slot="prepend">项目次数</span>
-      </Input>
+      <div>项目类型：{{index.p_type}}</div>
       <br/>
-      <Input v-model="p_sp">
-        <span slot="prepend">项目间隔</span>
-      </Input>
+      <div>单次价格：{{index.p_price}}</div>
+      <br/>
+      <div>疗程价格：{{index.p_Lprice}}</div>
+      <br/>
+      <div>卡扣疗程价格：{{index.p_CLprice}}</div>
+      <br/>
+      <div>体验价格：{{index.p_ETprice}}</div>
+      <br/>
+      <div>功效：{{index.p_effect==1?'强':'弱'}}</div>
+      <br/>
+      <div>备注：{{index.p_other}}</div>
     </Modal>
   </div>
 </template>
@@ -40,7 +39,7 @@
     data () {
       return {
         name: '',
-        emacs: '新增项目',
+        index: '',
         emac: false,
         columns: [
           {
@@ -56,12 +55,16 @@
             key: 'p_type',
           },
           {
-            title: '项目次数',
-            key: 'p_time'
-          },
-          {
-            title: '项目间隔',
-            key: 'p_sp',
+            title: '功效',
+            key: 'p_effect',
+            render: (h, p) => {
+              if(p.row.p_effect == 0) {
+                return '弱';
+              }
+              if(p.row.p_effect == 1) {
+                return '强';
+              }
+            },
           },
           {
             title: '操作',
@@ -69,66 +72,36 @@
             width: 300,
             align: 'center',
             render: (h, params) => {
-                return h('div', [
-
-                  h('Button', {
-                    props: {
-                      type: 'primary',
-                      size: 'small'
-                    },
-                    style: {
-                      marginRight: '5px'
-                    },
-                    on: {
-                      click: () => {
-//                        this.edit(params.index, 1)
-                      }
+              return h('div', [
+                h('Button', {
+                  props: {
+                    type: 'primary',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.edit(params.index, 1)
                     }
-                  }, '详情'),
-                  h('Button', {
-                    props: {
-                      type: 'primary',
-                      size: 'small'
-                    },
-                    style: {
-                      marginRight: '5px'
-                    },
-                    on: {
-                      click: () => {
-                        this.edit(params.index, 1)
-                      }
-                    }
-                  }, '修改'),
-                  h('Button', {
-                    props: {
-                      type: 'error',
-                      size: 'small'
-                    },
-                    style: {
-                      marginRight: '5px'
-                    },
-                    on: {
-                      click: () => {
-//                        this.option(params.index)
-                      }
-                    }
-                  }, '删除')
-                ]);
-              }
+                  }
+                }, '详情'),
+              ]);
+            }
           }
         ],
-        p_name: '',
-        p_number: '',
-        p_type: '',
-        p_time: '',
-        p_sp: '',
         data: [
           {
             p_name: '宝宝霜',
             p_number: '34223419478',
             p_type: '面部项目',
-            p_time: '2',
-            p_sp: '2',
+            p_price: 220,
+            p_Lprice: 210,
+            p_CLprice: 200,
+            p_ETprice: 210,
+            p_effect: 0,
+            p_other: '备注信息备注信息备注信息备注信息',
           },
         ],
       }
@@ -136,22 +109,9 @@
     created() {
     },
     methods: {
-      newEm() {
-        this.emac = true;
-        this.p_name = '';
-        this.p_number = '';
-        this.p_type = '';
-        this.p_time = '';
-        this.p_sp = '';
-      },
       edit(index) {
         this.emac = true;
-        this.emacs = '修改项目';
-        this.p_number = this.data[index].p_number;
-        this.p_name = this.data[index].p_name;
-        this.p_type = this.data[index].p_type;
-        this.p_time = this.data[index].p_time;
-        this.p_sp = this.data[index].p_sp;
+        this.index = this.data[index];
       },
       ok() {   //
 

@@ -1,35 +1,16 @@
 <template>
   <div>
-    <Row :gutter="24" class="option">
-      <Col span="4">
-        <Input v-model="name" placeholder="时间 / 名称" style="margin-top: -1px">
-          <span slot="append" class="serc" @click="serc">查找</span>
-        </Input>
-      </Col>
-      <Col span="2">
-        <Button class="hy_btn" @click="newEm">{{ r_type }}</Button>
-      </Col>
-    </Row>
+
+    <Tabs value="name1">
+      <TabPane label="店日报" name="name1"></TabPane>
+      <TabPane label="店月报" name="name2"></TabPane>
+      <TabPane label="顾问报表" name="name3"></TabPane>
+      <TabPane label="店长报表" name="name5"></TabPane>
+      <TabPane label="考勤表" name="name6"></TabPane>
+    </Tabs>
 
     <Table :columns="columns" :data="showData"></Table>
 
-    <Modal  v-model="emac" :title="emacs" @on-ok="ok"  >
-      <Input v-model="p_name">
-        <span slot="prepend">项目名称</span>
-      </Input>
-      <br/>
-      <Input v-model="p_number">
-        <span slot="prepend">项目类型</span>
-      </Input>
-      <br/>
-      <Input v-model="p_time">
-        <span slot="prepend">项目次数</span>
-      </Input>
-      <br/>
-      <Input v-model="p_sp">
-        <span slot="prepend">项目间隔</span>
-      </Input>
-    </Modal>
   </div>
 </template>
 
@@ -40,8 +21,6 @@
     data () {
       return {
         name: '',
-        emacs: '新增项目',
-        emac: false,
         columns: [
           {
             title: '报表时间',

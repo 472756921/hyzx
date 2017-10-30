@@ -1,10 +1,8 @@
 <template>
   <div>
     <Tabs value="name1">
-      <TabPane label="大库" name="name1">
-        <bigS/>
-      </TabPane>
-      <TabPane label="小库" name="name2"></TabPane>
+      <TabPane label="大库" name="name1"><bigS/></TabPane>
+      <TabPane label="小库" name="name2"><smallS/></TabPane>
     </Tabs>
   </div>
 </template>
