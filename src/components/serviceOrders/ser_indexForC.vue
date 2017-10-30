@@ -47,20 +47,8 @@
                 <span class="orderLiCon">{{ item.room }}</span>
               </Col>
               <Col span="8">
-                <span class="orderLititle">售前：</span>
+                <span class="orderLititle">是否售前：</span>
                 <span class="orderLiCon">{{ item.per_sale }}</span>
-              </Col>
-              <Col span="8">
-                <span class="orderLititle">售后：</span>
-                <span class="orderLiCon">{{ item.aft_sale }}</span>
-              </Col>
-              <Col span="8">
-                <span class="orderLititle">实操：</span>
-                <span class="orderLiCon">{{ item.a_o }}</span>
-              </Col>
-              <Col span="8">
-                <span class="orderLititle">赠送手工：</span>
-                <span class="orderLiCon">{{ item.g_h }}</span>
               </Col>
             </Row>
           </div>
@@ -102,9 +90,10 @@
       <br/>
       <br/>
       <span>用户选择：</span>
-      <Select v-model="model1" filterable style="width:200px" :disabled="serCard=='修改现金单'?true:false">
+      <Select v-model="model1" filterable style="width:200px" :disabled="serCard=='修改现金单'?true:false" @on-change="showUser">
         <Option v-for="item in u_list" :value="item.value" :key="item.value">{{ item.label }}</Option>
       </Select>
+      <span>{{userName}}</span>
       <br/>
       <br/>
       <span>技师选择：</span>
@@ -113,15 +102,10 @@
       </Select>
       <br/>
       <br/>
-      <span>售前选择：</span>
-      <Select v-model="model3" style="width:200px">
-        <Option v-for="item in e_list" :value="item.value" :key="item.value">{{ item.label }}</Option>
-      </Select>
-      <br/>
-      <br/>
-      <span>售后选择：</span>
+      <span>是否售前：</span>
       <Select v-model="model4" style="width:200px">
-        <Option v-for="item in e_list" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        <Option value="1">是</Option>
+        <Option value="0">否</Option>
       </Select>
       <br/>
       <br/>
@@ -175,6 +159,7 @@
     name: 'ser_indexForC',
     data() {
       return {
+        userName: '',
         serCard: '创建现金单',
         serser: '',
         serviceDate: '',
@@ -183,7 +168,6 @@
         settlementF: false,
         model1: '',
         model2: '',
-        model3: '',
         model4: '',
         model5: '',
         model6: [],
@@ -236,12 +220,14 @@
         ],
         u_list: [
           {
-            value: '1',
-            label: '刘德华',
+            value: 1,
+            label: '17780025052',
+            userName: '刘德华',
           },
           {
-            value: '2',
-            label: '王小虎',
+            value: 2,
+            label: '17780025052',
+            userName: '张学友',
           },
         ],
         order: [
@@ -390,6 +376,10 @@
       ok() {
         console.log(this.model6);
       },
+      showUser(v) {
+        v = Number(v)-1;
+        this.userName = this.u_list[v].userName;
+      },
       serc() {    //搜索
         if (this.name == '') {
           this.$Message.warning('请输入用户名字');
@@ -401,7 +391,6 @@
         this.single = false;
         this.model1 = '';
         this.model2 = '';
-        this.model3 = '';
         this.model4 = '';
         this.serviceDate = '';
         this.model5 = '';
@@ -409,6 +398,7 @@
         this.model7 = [];
         this.model8 = [];
         this.model9 = [];
+        this.userName = '';
       },
       edit(i) {
         this.serCard = '修改现金单';
@@ -421,7 +411,6 @@
         }
         this.model1 = tem.u_id;
         this.model2 = tem.e_id;
-        this.model3 = tem.per_id;
         this.model4 = tem.aft_id;
         this.model5 = tem.room;
         this.model8 = tem.p_name;

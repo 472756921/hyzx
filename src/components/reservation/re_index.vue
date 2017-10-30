@@ -131,7 +131,6 @@
           }
           this.transformF = true;
           this.model1 = true;
-          console.log(calEvent);
         },
       });
     },

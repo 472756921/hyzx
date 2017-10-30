@@ -47,12 +47,8 @@
                 <span class="orderLiCon">{{ item.room }}</span>
               </Col>
               <Col span="8">
-                <span class="orderLititle">售前：</span>
+                <span class="orderLititle">是否售前：</span>
                 <span class="orderLiCon">{{ item.per_sale }}</span>
-              </Col>
-              <Col span="8">
-                <span class="orderLititle">售后：</span>
-                <span class="orderLiCon">{{ item.aft_sale }}</span>
               </Col>
             </Row>
           </div>
@@ -102,15 +98,10 @@
       </Select>
       <br/>
       <br/>
-      <span>售前选择：</span>
-      <Select v-model="model3" style="width:200px">
-        <Option v-for="item in e_list" :value="item.value" :key="item.value">{{ item.label }}</Option>
-      </Select>
-      <br/>
-      <br/>
-      <span>售后选择：</span>
+      <span>是否售前：</span>
       <Select v-model="model4" style="width:200px">
-        <Option v-for="item in e_list" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        <Option value="1">是</Option>
+        <Option value="0">否</Option>
       </Select>
       <br/>
       <br/>
@@ -173,7 +164,6 @@
         model1: '',
         model2: '',
         model2_: '',
-        model3: '',
         model4: '',
         model5: '',
         model6: [],
@@ -351,7 +341,6 @@
         this.single = false;
         this.model1 = '';
         this.model2 = '';
-        this.model3 = '';
         this.model4 = '';
         this.serviceDate = '';
         this.model5 = '';
@@ -371,7 +360,6 @@
         }
         this.model1 = tem.u_id;
         this.model2 = tem.e_id;
-        this.model3 = tem.per_id;
         this.model4 = tem.aft_id;
         this.model5 = tem.room;
         this.model8 = tem.p_name;
