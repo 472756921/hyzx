@@ -25,6 +25,17 @@
       </Select>
       <br/>
       <br/>
+      <div>技师</div>
+      <Select v-model="model5" style="width:200px">
+        <Option value="a">技师A</Option>
+        <Option value="b">技师B</Option>
+        <Option value="c">技师C</Option>
+        <Option value="d">技师D</Option>
+        <Option value="e">技师E</Option>
+        <Option value="f">技师F</Option>
+      </Select>
+      <br/>
+      <br/>
       <div>服务房间</div>
       <Select v-model="model3" style="width:200px">
         <Option v-for="(item, i) in r_list" :value="item.value" :key="i">{{ item.label }}</Option>
@@ -53,6 +64,7 @@
         model2: '',
         model3: '',
         model4: '',
+        model5: '',
         userInfo: '',
         date: '',
         transformF: false,
@@ -132,6 +144,9 @@
           this.transformF = true;
           this.model1 = true;
         },
+        dayClick: (calEvent, jsEvent, view)=>{
+          this.newyy();
+        },
       });
     },
     created() {
@@ -141,6 +156,15 @@
       sercUser(){
         this.userInfo = '已经找到用户 刘德华';
       },
+      formatDate(now) {
+        var year=now.getYear();
+        var month=now.getMonth()+1;
+        var date=now.getDate();
+        var hour=now.getHours();
+        var minute=now.getMinutes();
+        var second=now.getSeconds();
+        return "20"+year+"-"+month+"-"+date+" "+hour+":"+minute+":"+second;
+      },
       newyy() {
         this.model1 = true;
         this.newDate = '';
@@ -148,16 +172,17 @@
         this.model2 = '';
         this.model3 = '';
         this.model4 = '';
+        this.model5 = '';
         this.transformF = false;
       },
       ok() {
-        if( this.newDate == '' ||  this.newDate2 == '' || this.model2 == '' || this.model3 == '' || this.model4 == '') {
+        if( this.newDate == '' ||  this.newDate2 == '' || this.model2 == '' || this.model3 == '' || this.model4 == '' || this.model5 == '') {
           this.$Message.error('请完整填写预约信息');
           return false
         }
         const events = {
             id: '23',
-            resourceId: 'c',
+            resourceId: this.model5,
             start: this.newDate,
             end: this.newDate2,
             title: this.model2 + '/' +this.model3 + '/' +this.model4,
