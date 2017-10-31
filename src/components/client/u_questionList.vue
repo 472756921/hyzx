@@ -5,7 +5,15 @@
     <br/>
     <Table :columns="question" :data="questionData" style="width: 100%;margin: 0!important;"></Table>
     <Page :current="2" :total="50" simple class="center"></Page>
+
     <Modal v-model="wayf" title="解决方案">
+      <div>问题描述：</div>
+      <Input v-model="newquestion" :disabled="waysF" type="textarea" :autosize="{minRows: 2,maxRows: 5}"/>
+      <div style="margin-top: 10px">
+        <div>检测报告：</div>
+        <img src="https://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar" width="60px" @click="showImg('a42bdcc1178e62b4694c830f028db5c0')" class="pointer" title="点击查看大图">
+        <img src="https://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar" width="60px" @click="showImg('a42bdcc1178e62b4694c830f028db5c0')" class="pointer" title="点击查看大图">
+      </div>
       <RadioGroup v-model="radio">
         <Radio label="1" :disabled="waysF">基础方案</Radio>
         <Radio label="2" :disabled="waysF">推荐方案</Radio>
@@ -16,10 +24,14 @@
       <Input v-model="textarea" type="textarea" :disabled="waysF" :autosize="{minRows: 2,maxRows: 5}"></Input>
       <div style="margin: 10px 0">治疗结果：</div>
       <Input v-model="complete" type="textarea" disabled :autosize="{minRows: 2,maxRows: 5}"/>
+      <div style="margin: 10px 0">治疗完成时间：</div>
     </Modal>
 
     <Modal v-model="newquestionF" title="新建问题">
       <Input v-model="newquestion" type="textarea" :autosize="{minRows: 2,maxRows: 5}"/>
+      <br/>
+      <br/>
+      <imgUp></imgUp>
     </Modal>
 
     <Modal v-model="operatingF" title="完成疗程">
@@ -27,14 +39,22 @@
       <div>治疗结果：</div>
       <Input v-model="complete" type="textarea" :autosize="{minRows: 2,maxRows: 5}"/>
     </Modal>
+
+    <Modal title="查看图片" v-model="visible" style="z-index: 99999;position: absolute">
+      <img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="visible" style="width: 100%">
+    </Modal>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import imgUp from '../ut/imgUp.vue';
+
   export default {
     name: 'u_questionList',
+    components: {imgUp},
     data(){
       return {
+        visible: false,
         complete: '',
         newquestion: '',
         newquestionF: false,
@@ -86,10 +106,10 @@
           }},
         ],
         questionData: [
-          {date: '2012-12-12', question: '皮肤暗沉', resti: 1, status: 1},
-          {date: '2012-12-12', question: '眼部皮肤松弛', resti: 2, status: 0},
-          {date: '2012-12-12', question: '眼袋', resti: 3, status: 1},
-          {date: '2012-12-12', question: '黄褐斑', resti: 0, status: 0},
+          {date: '2012-12-12', question: '皮肤暗沉', resti: 1, status: 1, completeDate: '2013-03-12'},
+          {date: '2012-12-12', question: '眼部皮肤松弛', resti: 2, status: 0, completeDate: '未完成'},
+          {date: '2012-12-12', question: '眼袋', resti: 3, status: 1, completeDate: '2013-03-12'},
+          {date: '2012-12-12', question: '黄褐斑', resti: 0, status: 0, completeDate: '未完成'},
         ],
       }
     },
@@ -107,6 +127,10 @@
       },
     },
     methods: {
+      showImg(img){
+        this.visible = true;
+        this.imgName = img;
+      },
       operating() {
         this.operatingF = true;
       },
@@ -134,5 +158,8 @@
   .center{
     margin: 10px auto;
     text-align: center;
+  }
+  .pointer{
+    cursor: pointer;
   }
 </style>

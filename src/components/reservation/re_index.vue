@@ -2,7 +2,7 @@
   <div>
     <Row :gutter="24" class="option">
       <Col span="4">
-        <DatePicker type="date" placeholder="选择日期" style="width: 200px" v-model="date"></DatePicker>
+        <DatePicker type="date" placeholder="选择日期" style="width: 100%" v-model="date"></DatePicker>
       </Col>
       <Col span="2">
         <Button class="hy_btn" @click="newyy">新建预约</Button>

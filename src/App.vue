@@ -35,4 +35,7 @@ export default {
     padding: 10px 10px 16px;
     border-bottom: 10px solid #F5F7F9;
   }
+  #app{
+    min-width: 1100px;
+  }
 </style>

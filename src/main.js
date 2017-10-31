@@ -5,7 +5,6 @@ import VueResource from 'vue-resource';
 import axios from 'axios';
 import iView from 'iview';
 import 'iview/dist/styles/iview.css';
-import './my-theme/index.less';
 //import fullcalendar from 'fullcalendar/dist/fullcalendar.min';
 //import 'fullcalendar/dist/fullcalendar.min.css';
 
