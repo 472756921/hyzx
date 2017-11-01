@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Hello from '@/components/Hello'
-
+import Login from '@/components/Login'
 //employee
 import e_index from '@/components/employee/e_index'
 
@@ -24,8 +24,13 @@ import b_index from '@/components/basicInformation/b_index'
 
 Vue.use(Router)
 
-export default new Router({
+const router =  new Router({
   routes: [
+    {
+      path: '',
+      name: 'login',
+      component: Login,
+    },
     {
       path: '/',
       name: 'Hello',
@@ -83,5 +88,9 @@ export default new Router({
         },
       ],
     },
-  ]
+  ],
 })
+router.beforeEach((to, from, next) => {
+  next();
+})
+export default router;
