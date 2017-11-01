@@ -68,7 +68,7 @@ export default {
         return "Safari";
       } //判断是否Safari浏览器
       if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !userAgent.indexOf("Opera") > -1) {
-        var IE5 = IE55 = IE6 = IE7 = IE8 = false;
+        var IE5 = IE55 = IE6 = IE7 = IE8 = IE9 = false;
         var reIE = new RegExp("MSIE (\\d+\\.\\d+);");
         reIE.test(userAgent);
         var fIEVersion = parseFloat(RegExp["$1"]);
@@ -76,6 +76,7 @@ export default {
         IE6 = fIEVersion == 6.0;
         IE7 = fIEVersion == 7.0;
         IE8 = fIEVersion == 8.0;
+        IE9 = fIEVersion == 9.0;
         if (IE55) {
           alert('您的浏览器太老了，我们不再支持');
           window.location.href = 'http://www.goody.com.cn/2014/updatebrowser/';
@@ -89,6 +90,10 @@ export default {
           window.location.href = 'http://www.goody.com.cn/2014/updatebrowser/';
         }
         if (IE8) {
+          alert('您的浏览器太老了，我们不再支持');
+          window.location.href = 'http://www.goody.com.cn/2014/updatebrowser/';
+        }
+        if (IE9) {
           alert('您的浏览器太老了，我们不再支持');
           window.location.href = 'http://www.goody.com.cn/2014/updatebrowser/';
         }

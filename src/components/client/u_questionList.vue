@@ -146,7 +146,6 @@
         }
         this.wayf = true;
       },
-      datile() {},
     },
   };
 </script>
