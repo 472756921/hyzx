@@ -45,9 +45,54 @@ export default {
       msg: 'Welcome to Your Vue.js App'
     }
   },
+  created(){
+    this.myBrowser();
+  },
   methods: {
     go(name) {
       this.$router.push({name: name});
+    },
+    myBrowser(){
+      const userAgent = navigator.userAgent; //取得浏览器的userAgent字符串
+      const l = userAgent.split(' ');
+      if (userAgent.indexOf("Opera") > -1) {
+        return "Opera"
+      }; //判断是否Opera浏览器
+      if (userAgent.indexOf("Firefox") > -1) {
+        return "FF";
+      } //判断是否Firefox浏览器
+      if (userAgent.indexOf("Chrome") > -1){
+        return "Chrome";
+      }
+      if (userAgent.indexOf("Safari") > -1) {
+        return "Safari";
+      } //判断是否Safari浏览器
+      if (userAgent.indexOf("compatible") > -1 && userAgent.indexOf("MSIE") > -1 && !userAgent.indexOf("Opera") > -1) {
+        var IE5 = IE55 = IE6 = IE7 = IE8 = false;
+        var reIE = new RegExp("MSIE (\\d+\\.\\d+);");
+        reIE.test(userAgent);
+        var fIEVersion = parseFloat(RegExp["$1"]);
+        IE55 = fIEVersion == 5.5;
+        IE6 = fIEVersion == 6.0;
+        IE7 = fIEVersion == 7.0;
+        IE8 = fIEVersion == 8.0;
+        if (IE55) {
+          alert('您的浏览器太老了，我们不再支持');
+          window.location.href = 'http://www.goody.com.cn/2014/updatebrowser/';
+        }
+        if (IE6) {
+          alert('您的浏览器太老了，我们不再支持');
+          window.location.href = 'http://www.goody.com.cn/2014/updatebrowser/';
+        }
+        if (IE7) {
+          alert('您的浏览器太老了，我们不再支持');
+          window.location.href = 'http://www.goody.com.cn/2014/updatebrowser/';
+        }
+        if (IE8) {
+          alert('您的浏览器太老了，我们不再支持');
+          window.location.href = 'http://www.goody.com.cn/2014/updatebrowser/';
+        }
+      }; //判断是否IE浏览器
     }
   },
 }
