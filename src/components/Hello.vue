@@ -19,8 +19,7 @@
         <span class="title">美容院门店系统</span>
         <div class="adminInfo">
           <Avatar icon="person" size="large" style="vertical-align: middle"/>
-          <span class="user"> &nbsp;&nbsp;刘德华 <Icon type="arrow-down-b"></Icon>
-          </span>
+          <span class="user" @click="go('b_index')"> &nbsp;&nbsp;刘德华</span>
           <span> &nbsp;&nbsp;|&nbsp;&nbsp; </span>
           <span class="user">退出&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
         </div>

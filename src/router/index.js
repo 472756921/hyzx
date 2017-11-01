@@ -20,6 +20,8 @@ import r_index from '@/components/report/r_index'
 
 import re_index from '@/components/reservation/re_index'
 
+import b_index from '@/components/basicInformation/b_index'
+
 Vue.use(Router)
 
 export default new Router({
@@ -29,6 +31,11 @@ export default new Router({
       name: 'Hello',
       component: Hello,
       children: [
+        {
+          path: 'b_index',
+          name: 'b_index',
+          component: b_index,
+        },
         {
           path: 'employee',
           name: 'employee',
