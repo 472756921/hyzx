@@ -2,19 +2,19 @@
     <div>
       <Tabs>
         <TabPane label="个人信息" icon="person">
-
-        </TabPane>
-        <TabPane label="密码修改" icon="gear-a">
-
+          <b_info></b_info>
         </TabPane>
       </Tabs>
     </div>
 </template>
 
 <script type="text/ecmascript-6">
-    export default {
-        name: 'b_index',
-    };
+  import b_info from './b_info.vue';
+
+  export default {
+    name: 'b_index',
+    components: {b_info},
+  };
 </script>
 
 <style scoped>

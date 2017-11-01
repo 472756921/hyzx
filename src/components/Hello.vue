@@ -18,7 +18,7 @@
       <div class="layout-header">
         <span class="title">美容院门店系统</span>
         <div class="adminInfo">
-          <Avatar icon="person" size="large" style="vertical-align: middle"/>
+          <Avatar src="http://k2.jsqq.net/uploads/allimg/1706/7_170629152344_5.jpg" size="large" style="vertical-align: middle"/>
           <span class="user" @click="go('b_index')"> &nbsp;&nbsp;刘德华</span>
           <span> &nbsp;&nbsp;|&nbsp;&nbsp; </span>
           <span class="user">退出&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>

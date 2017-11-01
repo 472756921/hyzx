@@ -30,6 +30,7 @@ export default {
   .hy_btn:hover {
     border-color: #66368C!important;
     color: #66368C!important;;
+    background-color: #fff!important;
   }
   .option{
     padding: 10px 10px 16px!important;;
