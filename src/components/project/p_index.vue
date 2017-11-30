@@ -33,7 +33,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-
+import {p_list} from '../../interface';
   export default {
     name: 'p_index',
     data () {
@@ -107,6 +107,7 @@
       }
     },
     created() {
+      this.getList(1);
     },
     methods: {
       edit(index) {
@@ -131,6 +132,20 @@
         this.model3 = this.data[index].c_question;
         this.model4 =  '',
         this.emclass = '投诉处理';
+      },
+      getList(page) {
+        this.$ajax({
+          method: 'GET',
+          dataType: 'JSON',
+          contentType: 'application/json;charset=UTF-8',
+          headers: {
+            "authToken": sessionStorage.getItem('authToken')
+          },
+          url: p_list() + '?page='+page+'&pageSize=50',
+        }).then((res) => {
+          this.data = res.data.results;
+        }).catch((error) => {
+        });
       },
     }
   };

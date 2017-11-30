@@ -90,6 +90,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import { c_list, c_save } from '../../interface';
 
   export default {
     name: 'c_index',
@@ -156,7 +157,7 @@
           {
             title: '投诉问题',
             key: 'c_question',
-            width: 600,
+            width: 300,
           },
           {
             title: '投诉时间',
@@ -268,8 +269,23 @@
       }
     },
     created() {
+      this.getList()
     },
     methods: {
+      getList() {
+        this.$ajax({
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            "authToken": sessionStorage.getItem('authToken')
+          },
+          data: {},
+          contentType: 'application/json;charset=UTF-8',
+          url: c_list() + '?page=1&pageSize=30',
+        }).then((res) => {
+        }).catch((error) => {
+        });
+      },
       showOrder(){
         this.orderF=true;
       },
@@ -289,7 +305,23 @@
         this.model4 = this.data[index].c_re;
         this.emclass = '投诉详情';
       },
-      ok() {   //
+      ok() {
+        if(this.emclass != '新建投诉'){
+          return ;
+        }
+        this.$ajax({
+          method: 'POST',
+          dataType: 'JSON',
+          contentType: 'application/json;charset=UTF-8',
+          data: this.user,
+          headers: {
+            "authToken": sessionStorage.getItem('authToken')
+          },
+          url: url,
+        }).then((res) => {
+          this.$Message.success('操作成功')
+        }).catch((error) => {
+        });
       },
       serc() {    //搜索
         if (this.name == '') {

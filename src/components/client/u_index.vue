@@ -12,23 +12,21 @@
     </Row>
     <Table :columns="columns" :data="data"></Table>
 
-    <Modal  v-model="emac" :title="emclass" @on-ok="ok"  >
+    <Modal  v-model="emac" :title="emclass" @on-ok="saveUser"  >
       <h3>基础信息</h3>
       <br/>
-      <Input v-model="u_name" :disabled="emclass=='修改用户'?true:false" ><span slot="prepend">用户姓名</span></Input>
+      <Input v-model="user.realName" :disabled="emclass=='修改用户'?true:false" ><span slot="prepend">用户姓名</span></Input>
       <br/>
-      <Input v-model="u_idNumber" :disabled="emclass=='修改用户'?true:false"><span slot="prepend">身份证号</span></Input>
+      <Input v-model="user.idCardNumber" :disabled="emclass=='修改用户'?true:false"><span slot="prepend">身份证号</span></Input>
       <br/>
-      <Input v-model="u_phone"><span slot="prepend">电话号码</span></Input>
+      <Input v-model="user.phoneNumber"><span slot="prepend">电话号码</span></Input>
       <br/>
-      <Input v-model="u_skit"  v-if="emclass=='修改用户'" disabled><span slot="prepend">有效卡</span></Input>
-      <br/>
-      <RadioGroup v-model="u_live" type="button">
-        <Radio label="1">普通会员</Radio>
-        <Radio label="2">白银会员</Radio>
-        <Radio label="3">黄金会员</Radio>
-      </RadioGroup>
+      <span>推荐人：</span>
+      <Select v-model="user.introducerId" filterable style="width:200px" :disabled="emclass=='修改用户'?true:false">
+        <!--<Option v-for="item in u_list" :value="item.value" :key="item.value">{{ item.label }}</Option>-->
+      </Select>
     </Modal>
+
     <Modal  v-model="service" title="创建服务单" @on-ok="ok"  >
       <Checkbox v-model="single">匿名服务单</Checkbox>
       <br/>
@@ -80,6 +78,7 @@
         </Option>
       </Select>
     </Modal>
+
     <Modal  v-model="openCard" :title="cards" @on-ok="ok"  >
       <Select v-model="model5" style="width:200px">
         <Option v-for="item in card_list" :value="item.value" :key="item.value">
@@ -93,6 +92,8 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import { u_list, u_new, u_edit } from '../../interface';
+  import IdentityCodeValid from '../ut/IDNumberCheck';
 
   export default {
     name: 'u_index',
@@ -101,22 +102,34 @@
         u_name: '',
         cards: '用户开卡',
         single: false,
-        u_idNumber: '',
-        u_phone: '',
-        u_skit: '',
         serviceDate: '',
-        u_group: '',
-        u_live: '',
-        u_type: '',
         emclass: '', //新增、修改员工 modal标题
         name: '',
         emac: false,
         openCard: false,
         service: false,
+        user: {
+          id: '',
+          realName: '',
+          idCardNumber: '',
+          phoneNumber: '',
+          gender: '',
+          birthday: '',
+          level: '',
+          integral: '',
+          introducer: '暂无',
+          introducerId: '5',
+          storeName: '',
+          storeId: '',
+          registrationTime: '',
+          money: '',
+          createPerson: '',
+          createId: ''
+        },
         columns: [
           {
             title: '姓名',
-            key: 'u_name',
+            key: 'realName',
           },
           {
             title: '年龄',
@@ -124,26 +137,26 @@
           },
           {
             title: '性别',
-            key: 'u_sex'
+            key: 'gender'
           },
           {
             title: '电话号码',
-            key: 'u_phone'
+            key: 'phoneNumber'
           },
           {
             title: '等级',
-            key: 'u_class',
-            render: (h, params) => {
-              if(params.row.u_class == 1){
-                return ("普通会员");
-              }
-              if(params.row.u_class == 2){
-                return ("白银会员");
-              }
-              if(params.row.u_class == 3){
-                return ("黄金会员");
-              }
-            }
+            key: 'level',
+//            render: (h, params) => {
+//              if(params.row.level == 1){
+//                return ("普通会员");
+//              }
+//              if(params.row.level == 2){
+//                return ("白银会员");
+//              }
+//              if(params.row.level == 3){
+//                return ("黄金会员");
+//              }
+//            }
           },
           {
             title: '操作',
@@ -154,7 +167,7 @@
               return h('div', [
                 h('Button', {
                   props: {
-                    type: 'primary',
+                    type: 'success',
                     size: 'small'
                   },
                   style: {
@@ -176,27 +189,29 @@
                   },
                   on: {
                     click: () => {
-                      this.edit(params.index)
+                      this.datile(params.index)
                     }
                   }
                 }, '详细'),
+                h('Button', {
+                  props: {
+                    type: 'warning',
+                    size: 'small'
+                  },
+                  style: {
+                    marginRight: '5px'
+                  },
+                  on: {
+                    click: () => {
+                      this.edit(params.index)
+                    }
+                  }
+                }, '修改电话'),
               ]);
             }
           }
         ],
-        data: [
-          {
-            u_id: 12,
-            u_name: '小黑',
-            u_age: 18,
-            u_sex: '女',
-            u_idNumber: 510203944839382766,
-            u_phone: 17780039283,
-            u_class: '2',
-            u_skit: '美白卡（即将到期），抽脂卡',
-            u_joinDate: '2014-03-23',
-          },
-        ],
+        data: [],
         e_list: [
           {
             value: '1',
@@ -261,20 +276,66 @@
       }
     },
     created() {
+      this.getList(1);
     },
     methods: {
+      getList(page) {
+        this.$ajax({
+          method: 'GET',
+          dataType: 'JSON',
+          contentType: 'application/json;charset=UTF-8',
+          headers: {
+            "authToken": sessionStorage.getItem('authToken')
+          },
+          url: u_list() + '?page='+page+'&pageSize=30',
+        }).then((res) => {
+          this.data = res.data.results;
+        }).catch((error) => {
+        });
+      },
+      saveUser() {
+        if(this.user.realName == '' || this.user.idCardNumber == '' || this.user.phoneNumber == '' || this.user.introducer == '') {
+          this.$Message.warning('请填写用户信息');
+          return ;
+        }
+        let url = u_new();
+        if (this.emclass == '修改用户') {
+          url = u_edit();
+        } else {
+          let d = IdentityCodeValid(this.user.idCardNumber);
+          if (!d.passes){
+            this.$Message.error(d.tips);
+            return
+          }
+          this.user.sex = d.sex;
+          this.user.birthday = d.brithday;
+        }
+        this.$ajax({
+          method: 'POST',
+          dataType: 'JSON',
+          contentType: 'application/json;charset=UTF-8',
+          data: this.user,
+          headers: {
+            "authToken": sessionStorage.getItem('authToken')
+          },
+          url: url,
+        }).then((res) => {
+          this.$Message.success('操作成功')
+        }).catch((error) => {
+        });
+      },
       newEm() {
         this.emclass = '新增用户';
         this.emac = true;
-        this.u_name = '';
-        this.u_phone = '';
-        this.u_idNumber = '';
-        this.u_skit = '';
-        this.u_group = '';
-        this.u_type = '';
-        this.u_live = '';
+        this.clearUser();
       },
       edit(index) {
+        this.emclass = '修改用户';
+        this.emac = true;
+        this.clearUser();
+        this.user =  this.data[index];
+      },
+      datile(index) {
         this.$router.push({path:'u_datile/'+this.data[index].u_id});
       },
       ok() {   //
@@ -283,7 +344,20 @@
       serc() {    //搜索
         if (this.name == '') {
           this.$Message.warning('请输入用户名字');
+          return
         }
+        this.$ajax({
+          method: 'GET',
+          dataType: 'JSON',
+          contentType: 'application/json;charset=UTF-8',
+          headers: {
+            "authToken": sessionStorage.getItem('authToken')
+          },
+          url: u_list() + '?page=1&pageSize=50&name='+this.name,
+        }).then((res) => {
+          this.data = res.data.results;
+        }).catch((error) => {
+        });
       },
       remove (index) {
         this.data6.splice(index, 1);
@@ -311,6 +385,26 @@
           ]
         }
         this.openCard = true;
+      },
+      clearUser(){
+        this.user =  {
+          id: '',
+          realName: '',
+          idCardNumber: '',
+          phoneNumber: '',
+          gender: '',
+          birthday: '',
+          level: '',
+          integral: '',
+          introducer: '暂无',
+          introducerId: '5',
+          storeName: '',
+          storeId: '',
+          registrationTime: '',
+          money: '',
+          createPerson: '',
+          createId: ''
+        };
       },
     }
   };
