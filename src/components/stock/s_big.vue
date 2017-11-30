@@ -10,13 +10,13 @@
           <Button class="hy_btn" @click="newEm">新增入库</Button>
         </Col>
         <Col span="2">
-          <Button class="hy_btn" @click="getList(1)">盘点库存</Button>
+          <Button class="hy_btn" @click="getList(1,1)">盘点库存</Button>
         </Col>
         <Col span="2">
-          <Button class="hy_btn" @click="inStock(1)">入库记录</Button>
+          <Button class="hy_btn" @click="getList(1,2)">入库记录</Button>
         </Col>
         <Col span="2">
-          <Button class="hy_btn" @click="outStock(1)">出库记录</Button>
+          <Button class="hy_btn" @click="getList(1,3)">出库记录</Button>
         </Col>
       </Row>
       <br/>
@@ -83,11 +83,25 @@
             },
             {
               title: '入库时间',
-              key: 'storage'
+              key: 'storage',
+              render: (h, params) => {
+                if(this.type === 1){
+                  return '无';
+                } else {
+                  return params.row.storage;
+                }
+              },
             },
             {
               title: '过期时间',
               key: 'expiration',
+              render: (h, params) => {
+                if(this.type === 2){
+                  return params.row.expiration;
+                } else {
+                  return '无';
+                }
+              },
             },
             {
               title: '数量',
@@ -96,6 +110,13 @@
             {
               title: '货品来源',
               key: 'source',
+              render: (h, params) => {
+                if(this.type === 2){
+                  return params.row.source;
+                } else {
+                  return '无';
+                }
+              },
             },
             {
               title: '操作',
@@ -118,6 +139,8 @@
                       }
                     }, '转入小库'),
                   ]);
+                } else {
+                  return '无';
                 }
               }
             },
@@ -136,10 +159,10 @@
             url = s_List() + '?page='+page+'&pageSize=30';
           }
           if(type === 2) {
-            url = s_List() + '?page='+page+'&pageSize=30';
+            url = s_inStock() + '?page='+page+'&pageSize=30';
           }
           if(type === 3) {
-            url = s_List() + '?page='+page+'&pageSize=30';
+            url = s_outStock() + '?page='+page+'&pageSize=30';
           }
           this.$ajax({
             method: 'GET',
