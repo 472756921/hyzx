@@ -86,7 +86,7 @@
       <br/>
       <br/>
       <span>技师选择：</span>
-      <Select v-model="model2" style="width:200px">
+      <Select v-model="model2" filterable style="width:200px">
         <Option v-for="item in e_list" :value="item.value" :key="item.value">{{ item.label }}</Option>
       </Select>
       <br/>
@@ -151,8 +151,13 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import {ser_list} from '../../interface';
+
   export default {
     name: 'ser_indexForS',
+    created() {
+      this.getList(1);
+    },
     data() {
       return {
         serCard: '创建服务单',
@@ -327,6 +332,20 @@
       }
     },
     methods: {
+      getList(page) {
+        this.$ajax({
+          method: 'GET',
+          dataType: 'JSON',
+          contentType: 'application/json;charset=UTF-8',
+          headers: {
+            "authToken": sessionStorage.getItem('authToken')
+          },
+          url: ser_list() + '?page='+page+'&pageSize=50',
+        }).then((res) => {
+          this.order = res.data.results;
+        }).catch((error) => {
+        });
+      },
       ok() {
         console.log(this.model6);
       },

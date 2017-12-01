@@ -15,7 +15,7 @@
     </Row>
     <Table :columns="columns" :data="data" :row-class-name="rowClassName"></Table>
 
-    <Modal  v-model="modal1" title="考勤打卡" @on-ok="ok"  >
+    <Modal  v-model="kqF" title="考勤打卡" @on-ok="ok"  >
       <div>现在时间：{{date}}</div>
       <br/>
       <RadioGroup v-model="kqClass" type="button">
@@ -28,7 +28,7 @@
       <DatePicker v-if="kqClass==3||kqClass==4" type="date" placeholder="选择日期" style="width: 200px;margin-top:20px" :value="bkDate"></DatePicker>
     </Modal>
 
-    <Modal  v-model="modal2" title="事件标记" @on-ok="ok"  >
+    <Modal  v-model="eventF" title="事件标记" @on-ok="ok"  >
       <div>{{date}}</div>
       <br/>
       <RadioGroup v-model="bjClass" type="button">
@@ -76,7 +76,7 @@
       </RadioGroup>
     </Modal>
 
-    <Modal  v-model="modal3" title="离职员工列表" width="90%">
+    <Modal  v-model="EOutF" title="离职员工列表" width="90%">
       <Table :columns="columns2" :data="data2"></Table>
     </Modal>
 
@@ -84,12 +84,13 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import { e_list, e_list_byID, e_save, e_edit } from '../../interface';
+  import { e_list, e_list_byID, e_save, e_edit, e_outList, e_out } from '../../interface';
 
   export default {
     name: 'e_index',
     data () {
       return {
+        index: '',
         employee: {
           realName: '',
           idCardNumber: '',
@@ -104,9 +105,9 @@
         bjDate: '',
         name: '',
         emac: false,
-        modal1: false,
-        modal2: false,
-        modal3: false,
+        kqF: false,
+        eventF: false,
+        EOutF: false,
         bjClass: '',
         kqClass: '',
         columns: [
@@ -251,91 +252,76 @@
         columns2: [
           {
             title: '员工编号',
-            key: 'e_number',
+            key: 'code',
           },
           {
             title: '姓名',
-            key: 'e_name',
+            key: 'realName',
           },
           {
             title: '年龄',
-            key: 'e_age'
+            key: 'age'
           },
           {
             title: '类型',
-            key: 'e_type',
+            key: 'roleId',
             render: (h, params) => {
-              if(params.row.e_type == 1){
+              if(params.row.roleId == 1){
                 return ("洗脚师");
               }
-              if(params.row.e_type == 2){
+              if(params.row.roleId == 2){
                 return ("按摩师");
               }
-              if(params.row.e_type == 3){
+              if(params.row.roleId == 3){
                 return ("洗头师");
               }
             }
           },
           {
             title: '性别',
-            key: 'e_sex'
+            key: 'sex'
           },
           {
             title: '身份证号码',
-            key: 'e_idNumber'
+            key: 'idCardNumber'
           },
           {
             title: '电话号码',
-            key: 'e_phone'
+            key: 'phoneNumber'
           },
           {
             title: '组别',
-            key: 'e_group'
+            key: 'groupId'
           },
           {
             title: '等级',
-            key: 'e_class',
+            key: 'gradeId',
             render: (h, params) => {
-              if(params.row.e_class == 1){
+              if(params.row.gradeId == 1){
                 return ("一级");
               }
-              if(params.row.e_class == 2){
+              if(params.row.gradeId == 2){
                 return ("二级");
               }
-              if(params.row.e_class == 3){
+              if(params.row.gradeId == 3){
                 return ("三级");
               }
             }
           },
           {
             title: '服务介绍',
-            key: 'e_skit'
+            key: 'serviceIntroduction'
           },
           {
             title: '入职时间',
-            key: 'e_joinDate'
+            key: 'entryTime'
           },
           {
             title: '离职时间',
             key: 'e_OutDate'
           },
         ],
-        data2: [
-          {
-            e_number: 12139,
-            e_name: '小白',
-            e_age: 38,
-            e_type: '1',
-            e_sex: '男',
-            e_idNumber: 510203944839382766,
-            e_phone: 17780039283,
-            e_group: '1',
-            e_class: '1',
-            e_skit: '搓澡',
-            e_joinDate: '2014-03-23',
-            e_OutDate: '2015-08-23',
-          },
-        ],
+        data2: [],
         date: '',
       }
     },
@@ -408,13 +394,31 @@
         });
       },
       daka (index) {
-        this.modal1 = true;
+        this.kqF = true;
+        this.index = index;
       },
       biaoji (index) {
-        this.modal2 = true;
+        this.eventF = true;
+        this.employee = this.data[index];
+        this.index = index;
       },
       ok() {   //
-
+        if(this.bjClass == 5) {
+          this.$ajax({
+            method: 'POST',
+            dataType: 'JSON',
+            headers: {
+              "authToken": sessionStorage.getItem('authToken')
+            },
+            data: {id: this.employee.id, reason:'', quitTime: '2012-12-12'},
+            contentType: 'application/json;charset=UTF-8',
+            url: e_out(),
+          }).then((res) => {
+            this.$Message.success('操作成功');
+            this.remove(this.index)
+          }).catch((error) => {
+          });
+        }
       },
       serc() {    //搜索员工
         if (this.name == '') {
@@ -435,10 +439,22 @@
         });
       },
       lizhi() {    //离职员工
-        this.modal3 = true;
+        this.EOutF = true;
+        this.$ajax({
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            "authToken": sessionStorage.getItem('authToken')
+          },
+          contentType: 'application/json;charset=UTF-8',
+          url: e_outList() + '?page=1&pageSize=50&name='+this.name,
+        }).then((res) => {
+          this.data2 = res.data.results;
+        }).catch((error) => {
+        });
       },
       remove (index) {
-        this.data6.splice(index, 1);
+        this.data.splice(index, 1);
       },
       getList(page) {
         this.$ajax({

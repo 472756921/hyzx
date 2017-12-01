@@ -10,6 +10,7 @@ export const login = function () {
   return API;
 };
 
+//----------------------------------------------------------------------------------------
 //员工列表
 export const e_list = function () {
   const URL = '/app/api/user/findUserList';
@@ -34,7 +35,19 @@ export const e_save = function () {
   const API = host + URL;
   return API;
 };
-
+//离职员工
+export const e_outList = function () {
+  const URL = '/app/api/user/findQuitList';
+  const API = host + URL;
+  return API;
+};
+//离职员工
+export const e_out = function () {
+  const URL = '/app/api/user/quit';
+  const API = host + URL;
+  return API;
+};
+//----------------------------------------------------------------------------------------
 //顾客列表
 export const u_list = function () {
   const URL = '/app/api/customer/findCustomerList';
@@ -53,14 +66,14 @@ export const u_edit = function () {
   const API = host + URL;
   return API;
 };
-
+//----------------------------------------------------------------------------------------
 //服务单列表
 export const ser_list = function () {
   const URL = '/app/api/service/findServiceOrder';
   const API = host + URL;
   return API;
 };
-
+//----------------------------------------------------------------------------------------
 //投诉列表
 export const c_list = function () {
   const URL = '/app/api/complaints/findComplaintsList';
@@ -73,8 +86,7 @@ export const c_save = function () {
   const API = host + URL;
   return API;
 };
-
-
+//----------------------------------------------------------------------------------------
 //库存盘点
 export const s_List = function () {
   const URL = '/app/api/warehousing/findList';
@@ -105,7 +117,7 @@ export const s_out = function () {
   const API = host + URL;
   return API;
 };
-
+//----------------------------------------------------------------------------------------
 //产品列表
 export const p_list = function () {
   const URL = '/app/api/project/findProjectList';
