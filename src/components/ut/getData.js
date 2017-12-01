@@ -4,8 +4,7 @@
 
 import {u_Alllist, e_Alllist, s_AllList, p_Alllist} from '../../interface';
 
-export const getAllClient = (type)=>{
-
+export const getAllClient = (type, _this, callBack)=>{
   let URL = '';
   if(type == 'u_Alllist') {
     URL = u_Alllist();
@@ -20,7 +19,7 @@ export const getAllClient = (type)=>{
     URL = p_Alllist();
   }
 
-  this.$ajax({
+  _this.$ajax({
     method: 'GET',
     dataType: 'JSON',
     contentType: 'application/json;charset=UTF-8',
@@ -29,7 +28,7 @@ export const getAllClient = (type)=>{
     },
     url: URL,
   }).then((res) => {
-    return res.data.results;
+    callBack(res.data, type);
   }).catch((error) => {
   });
 }

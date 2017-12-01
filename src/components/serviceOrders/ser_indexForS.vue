@@ -81,13 +81,13 @@
       <br/>
       <span>用户选择：</span>
       <Select v-model="model1" filterable style="width:200px" :disabled="serCard=='修改服务单'?true:false">
-        <Option v-for="item in u_list" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        <Option v-for="item in u_list" :value="item.id" :key="item.id">{{ item.realName }}</Option>
       </Select>
       <br/>
       <br/>
       <span>技师选择：</span>
       <Select v-model="model2" filterable style="width:200px">
-        <Option v-for="item in e_list" :value="item.value" :key="item.value">{{ item.label }}</Option>
+        <Option v-for="item in e_list" :value="item.id" :key="item.id">{{ item.realName }}</Option>
       </Select>
       <br/>
       <br/>
@@ -118,9 +118,9 @@
       <span v-if="serCard!='修改服务单'">项目选择：</span>
       <span v-if="serCard=='修改服务单'">增加项目：</span>
       <Select v-model="model6" multiple>
-        <Option v-for="item in p_list" :value="item.value" :key="item.value">
-          <span>{{ item.label }}</span>
-          <span style="float:right;color:#ccc">￥{{ item.price }}</span>
+        <Option v-for="item in p_list" :value="item.id" :key="item.id">
+          <span>{{ item.projectName }}</span>
+          <span style="float:right;color:#ccc">￥{{ item.money }}</span>
         </Option>
       </Select>
       <br/>
@@ -128,16 +128,6 @@
       <div v-if="serCard=='修改服务单'">已选项目：
         <span v-for="item in model8">{{ item.label }} <span class="price" >￥{{ item.price }}</span>&nbsp;&nbsp;</span>
       </div>
-      <br/>
-      <span v-if="serCard!='修改服务单'">产品选择：</span>
-      <span v-if="serCard=='修改服务单'">增加产品：</span>
-      <Select v-model="model7" multiple>
-        <Option v-for="item in pr_list" :value="item.value" :key="item.value">
-          <span>{{ item.label }}</span>
-          <span style="float:right;color:#ccc">￥{{ item.price }}</span>
-        </Option>
-      </Select>
-      <br/>
       <br/>
       <div v-if="serCard=='修改服务单'">已选项目：
         <span v-for="item in model9">{{ item.label }} <span class="price" >￥{{ item.price }}</span>&nbsp;&nbsp;</span>
@@ -157,7 +147,10 @@
     name: 'ser_indexForS',
     created() {
       this.getList(1);
-      console.log(this.getAllClient())
+      this.GetData('u_Alllist',this, this.setData);
+      this.GetData('e_Alllist',this, this.setData);
+      this.GetData('p_Alllist',this, this.setData);
+      this.GetData('s_AllList',this, this.setData);
     },
     data() {
       return {
@@ -176,16 +169,8 @@
         model7: [],
         model8: [],
         model9: [],
-        e_list: [
-          {
-            value: '1',
-            label: '小黑'
-          },
-          {
-            value: '2',
-            label: '小白'
-          },
-        ],
+        u_list: [],
+        e_list: [],
         r_list: [
           {
             value: '302',
@@ -218,16 +203,6 @@
             value: '2',
             price: '30.00',
             label: '霸王洗发露',
-          },
-        ],
-        u_list: [
-          {
-            value: '1',
-            label: '刘德华',
-          },
-          {
-            value: '2',
-            label: '王小虎',
           },
         ],
         order: [
@@ -333,6 +308,20 @@
       }
     },
     methods: {
+      setData(data, type) {
+        if(type == 'u_Alllist'){
+          this.u_list = data;
+        }
+        if(type == 'e_Alllist'){
+          this.e_list = data;
+        }
+        if(type == 'p_Alllist'){
+          this.p_list = data;
+        }
+        if(type == 's_AllList'){
+          this.pr_list = data;
+        }
+      },
       getList(page) {
         this.$ajax({
           method: 'GET',
@@ -348,7 +337,7 @@
         });
       },
       ok() {
-        console.log(this.model6);
+        console.log(this.model1);
       },
       serc() {    //搜索
         if (this.name == '') {
