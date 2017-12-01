@@ -11,23 +11,25 @@
     <Table :columns="columns" :data="data"></Table>
 
     <Modal  v-model="emac" title="项目信息" @on-ok="ok"  >
-      <div>项目编号：{{index.p_number}}</div>
+      <div>项目编号：{{project.code}}</div>
       <br/>
-      <div>项目名称：{{index.p_name}}</div>
+      <div>项目名称：{{project.projectName}}</div>
       <br/>
-      <div>项目类型：{{index.p_type}}</div>
+      <div>项目类型：{{project.type}}</div>
       <br/>
-      <div>单次价格：{{index.p_price}}</div>
+      <div>单次价格：{{project.money}}</div>
       <br/>
-      <div>疗程价格：{{index.p_Lprice}}</div>
+      <div>疗程价格：{{project.money}}</div>
       <br/>
-      <div>卡扣疗程价格：{{index.p_CLprice}}</div>
+      <div>卡扣疗程价格：{{project.money}}</div>
       <br/>
-      <div>体验价格：{{index.p_ETprice}}</div>
+      <div>体验价格：{{project.money}}</div>
       <br/>
-      <div>功效：{{index.p_effect==1?'强':'弱'}}</div>
+      <div>间隔：{{project.intervalTime}}</div>
       <br/>
-      <div>备注：{{index.p_other}}</div>
+      <div>功效：{{project.effect==1?'强':'弱'}}</div>
+      <br/>
+      <div>备注：{{project.intervalTime}}</div>
     </Modal>
   </div>
 </template>
@@ -39,29 +41,29 @@ import {p_list} from '../../interface';
     data () {
       return {
         name: '',
-        index: '',
+        project: '',
         emac: false,
         columns: [
           {
             title: '项目编号',
-            key: 'p_number',
+            key: 'code',
           },
           {
             title: '项目名称',
-            key: 'p_name'
+            key: 'projectName'
           },
           {
             title: '项目类型',
-            key: 'p_type',
+            key: 'type',
           },
           {
             title: '功效',
-            key: 'p_effect',
+            key: 'effect',
             render: (h, p) => {
-              if(p.row.p_effect == 0) {
+              if(p.row.effect == 0) {
                 return '弱';
               }
-              if(p.row.p_effect == 1) {
+              if(p.row.effect == 1) {
                 return '强';
               }
             },
@@ -91,19 +93,7 @@ import {p_list} from '../../interface';
             }
           }
         ],
-        data: [
-          {
-            p_name: '宝宝霜',
-            p_number: '34223419478',
-            p_type: '面部项目',
-            p_price: 220,
-            p_Lprice: 210,
-            p_CLprice: 200,
-            p_ETprice: 210,
-            p_effect: 0,
-            p_other: '备注信息备注信息备注信息备注信息',
-          },
-        ],
+        data: [],
       }
     },
     created() {
@@ -112,7 +102,7 @@ import {p_list} from '../../interface';
     methods: {
       edit(index) {
         this.emac = true;
-        this.index = this.data[index];
+        this.project = this.data[index];
       },
       ok() {   //
 
@@ -121,17 +111,6 @@ import {p_list} from '../../interface';
         if (this.name == '') {
           this.$Message.warning('请输入用户或技师名字');
         }
-      },
-      remove (index) {
-        this.data6.splice(index, 1);
-      },
-      option (index) {
-        this.emac = true;
-        this.model1 = this.data[index].u_id;
-        this.model2 = this.data[index].e_id;
-        this.model3 = this.data[index].c_question;
-        this.model4 =  '',
-        this.emclass = '投诉处理';
       },
       getList(page) {
         this.$ajax({

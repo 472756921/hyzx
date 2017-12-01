@@ -99,6 +99,12 @@ export const s_save = function () {
   const API = host + URL;
   return API;
 };
+//出库
+export const s_out = function () {
+  const URL = '/app/api/warehousing/warehousingOut';
+  const API = host + URL;
+  return API;
+};
 
 //产品列表
 export const p_list = function () {

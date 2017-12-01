@@ -56,7 +56,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import { s_List, s_inStock, s_save, s_outStock } from '../../interface';
+  import { s_List, s_inStock, s_save, s_outStock, s_out } from '../../interface';
 
     export default {
       name: 's_big',
@@ -68,6 +68,7 @@
             quantity: '',
             source: '',
             expiration: '',
+            quantity: '',
           },
           p_number: '',
           m_id:'',
@@ -76,7 +77,40 @@
           name: '',
           moveF: false,
           emac: false,
-          columns: [
+          columns: [],
+          columnsP: [
+            {
+              title: '货品名',
+              key: 'name',
+            },
+            {
+              title: '实际数量',
+              key: 'actualQuantity',
+            },
+            {
+              title: '操作',
+              key: 'move',
+              render: (h, params) => {
+                return h('div', [
+                  h('Button', {
+                    props: {
+                      type: 'primary',
+                      size: 'small'
+                    },
+                    style: {
+                      marginRight: '5px'
+                    },
+                    on: {
+                      click: () => {
+                        this.move(params)
+                      }
+                    }
+                  }, '转入小库'),
+                ]);
+              }
+            },
+          ],
+          columnsR: [
             {
               title: '货品名',
               key: 'name',
@@ -84,65 +118,32 @@
             {
               title: '入库时间',
               key: 'storage',
-              render: (h, params) => {
-                if(this.type === 1){
-                  return '无';
-                } else {
-                  return params.row.storage;
-                }
-              },
             },
             {
               title: '过期时间',
               key: 'expiration',
-              render: (h, params) => {
-                if(this.type === 2){
-                  return params.row.expiration;
-                } else {
-                  return '无';
-                }
-              },
             },
             {
-              title: '数量',
-              key: 'actualQuantity'
+              title: '入库数量',
+              key: 'quantity',
             },
             {
               title: '货品来源',
               key: 'source',
-              render: (h, params) => {
-                if(this.type === 2){
-                  return params.row.source;
-                } else {
-                  return '无';
-                }
-              },
+            },
+          ],
+          columnsC: [
+            {
+              title: '货品名',
+              key: 'name',
             },
             {
-              title: '操作',
-              key: 'move',
-              render: (h, params) => {
-                if(this.type === 1){
-                  return h('div', [
-                    h('Button', {
-                      props: {
-                        type: 'primary',
-                        size: 'small'
-                      },
-                      style: {
-                        marginRight: '5px'
-                      },
-                      on: {
-                        click: () => {
-                          this.move(params)
-                        }
-                      }
-                    }, '转入小库'),
-                  ]);
-                } else {
-                  return '无';
-                }
-              }
+              title: '出库数量',
+              key: 'quantity',
+            },
+            {
+              title: '出库时间',
+              key: 'storage',
             },
           ],
           data: [],
@@ -157,12 +158,15 @@
           this.type = type;
           if(type === 1) {
             url = s_List() + '?page='+page+'&pageSize=30';
+            this.columns = this.columnsP;
           }
           if(type === 2) {
             url = s_inStock() + '?page='+page+'&pageSize=30';
+            this.columns = this.columnsR;
           }
           if(type === 3) {
             url = s_outStock() + '?page='+page+'&pageSize=30';
+            this.columns = this.columnsC;
           }
           this.$ajax({
             method: 'GET',
@@ -192,10 +196,9 @@
         },
         move(r) {
           this.moveF = true;
-          this.m_name = r.row.p_name;
-          this.m_id = r.row.id;
+          this.m_name = r.row.name;
           this.m_number = '';
-          this.p_number = r.row.p_number;
+          this.p_number = r.row.actualQuantity;
         },
         movers() {
           if(this.m_number == ''){
@@ -206,6 +209,19 @@
             this.$Message.error('大库商品不足');
             return false;
           }
+          this.$ajax({
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+              "authToken": sessionStorage.getItem('authToken')
+            },
+            data: {},
+            contentType: 'application/json;charset=UTF-8',
+            url: s_out() + '?name='+this.m_name + '&actualQuantity=' + this.m_number + '&type=1',
+          }).then((res) => {
+            this.$Message.success('操作成功');
+          }).catch((error) => {
+          });
         },
         saveE() {
           this.stock.expiration = new Date(this.stock.expiration).Format('yyyy-MM-dd')
