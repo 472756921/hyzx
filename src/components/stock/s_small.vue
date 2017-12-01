@@ -20,6 +20,7 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import { s_outStock } from '../../interface';
     export default {
       name: 's_small',
       data () {
@@ -28,23 +29,11 @@
           columns: [
             {
               title: '货品名',
-              key: 'p_name',
-            },
-            {
-              title: '入库时间',
-              key: 'p_enterDate'
-            },
-            {
-              title: '过期时间',
-              key: 'p_afterDate',
+              key: 'name',
             },
             {
               title: '数量',
-              key: 'p_number'
-            },
-            {
-              title: '货品来源',
-              key: 'c_sp',
+              key: 'quantity'
             },
             {
               title: '操作',
@@ -69,19 +58,11 @@
               }
             },
           ],
-          data: [
-            {
-              p_name: '宝宝霜',
-              p_enterDate: '2012-12-12',
-              p_afterDate: '2016-12-12',
-              p_number: '39',
-              c_sp: '阿拉伯半岛',
-              id: 1,
-            },
-          ],
+          data: [],
         }
       },
       created() {
+        this.getList(1);
       },
       methods: {
         serc() {    //搜索
@@ -91,6 +72,20 @@
         },
         repot() {
 
+        },
+        getList(page) {
+          this.$ajax({
+            method: 'GET',
+            dataType: 'JSON',
+            headers: {
+              "authToken": sessionStorage.getItem('authToken')
+            },
+            contentType: 'application/json;charset=UTF-8',
+            url: s_outStock() + '?page='+page+'&pageSize=30&type=1',
+          }).then((res) => {
+            this.data = res.data.results;
+          }).catch((error) => {
+          });
         },
       },
     };

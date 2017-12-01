@@ -157,6 +157,7 @@
     name: 'ser_indexForS',
     created() {
       this.getList(1);
+      console.log(this.getAllClient())
     },
     data() {
       return {
