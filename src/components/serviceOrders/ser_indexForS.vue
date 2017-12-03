@@ -332,7 +332,7 @@
           },
           url: ser_list() + '?page='+page+'&pageSize=50',
         }).then((res) => {
-          this.order = res.data.results;
+//          this.order = res.data.results;
         }).catch((error) => {
         });
       },

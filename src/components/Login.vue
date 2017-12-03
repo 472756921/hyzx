@@ -53,7 +53,7 @@
 <style scoped>
   .content{
     height:100%;
-    background: url("/static/bk.png");
+    background: url("../assets/bk.png");
   }
   .box{
     padding: 60px 10px;
