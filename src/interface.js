@@ -2,7 +2,7 @@
  * Created by Benson on 2017/11/29.
  */
 
-const host = 'http://121.42.142.228:8060';
+const host = 'http://116.62.201.135:8080';
 
 export const login = function () {
   const URL = '/app/api/user/login';
