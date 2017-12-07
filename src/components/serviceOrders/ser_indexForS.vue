@@ -28,7 +28,7 @@
               </Col>
               <Col  span="8">
                 <span class="orderLititle">顾客电话：</span>
-                <span class="orderLiCon">{{ item.phone }}</span>
+                <span class="orderLiCon">{{ item.phoneNumber }}</span>
               </Col>
               <Col  span="8">
                 <span class="orderLititle">顾客等级：</span>
@@ -58,14 +58,9 @@
               {{ it.projectName }} &nbsp;<span class="price">￥{{ it.money }}</span>
             </div>
           </div>
-          <div>
-            <span class="orderLititle">卡扣产品：</span>
-            <span class="orderLiCon" v-for="(it,i) in item.pr_list">
-              霸王洗发露 <span class="orderNumber">X {{ it.number }}</span>
-              &nbsp; <span class="price">￥ {{ it.price * it.number }}</span>&nbsp;&nbsp;
-            </span>
+          <div><span class="orderLititle">卡扣疗程：</span>
+            {{item.card_lc}}
           </div>
-          <div><span class="orderLititle">卡扣疗程：</span>{{item.card_lc}}</div>
           <div class="prtotle">合计：<span class="price" style="font-size: 16px">￥{{ item.cashAmount }}</span></div>
           <div  style="width: 25%;margin: 0 auto">
             <Button  class="hy_btn" @click="settlement">结算</Button>
@@ -107,7 +102,7 @@
       <br/>
       <span>房间选择：</span>
       <Select v-model="orderINfo.roomId" style="width:200px">
-        <Option v-for="item in r_list" :value="item.label" :key="item.label">{{ item.label }}</Option>
+        <Option v-for="item in r_list" :value="item.id" :key="item.id">{{ item.roomName }}</Option>
       </Select>
       <br/>
       <br/>
@@ -148,6 +143,7 @@
       this.GetData('e_Alllist',this, this.setData);
       this.GetData('p_Alllist',this, this.setData);
       this.GetData('s_AllList',this, this.setData);
+      this.GetData('r_Alllist',this, this.setData);
     },
     data() {
       return {
@@ -168,69 +164,10 @@
         },
         u_list: [],
         e_list: [],
-        r_list: [
-          {
-            value: '302',
-            label: '302'
-          },
-          {
-            value: '303',
-            label: '303'
-          },
-        ],
+        r_list: [],
         p_list: [],
         pr_list: [],
-        order: [
-          {
-            orderClass: 1,
-            orderNumber: '123123232',
-            live: 1,
-            phone: 12211121212,
-            date: '2017-12-12',
-            u_name: '王小虎',
-            u_id: '2',
-            servicer: '小黑',
-            e_id: '1',
-            servicerIS: 1,
-            room: '303',
-            per_sale: '小黑',
-            aft_sale: '小黑',
-            card_lc: '美体',
-            p_name: [
-              {
-                value: '1',
-                price: 1200.00,
-                label: '美体',
-                a_o: '不懂',
-                g_h: '不懂',
-              },
-              {
-                value: '2',
-                price: 1100.00,
-                label: '嫩肤',
-                a_o: '不懂',
-                g_h: '不懂',
-              },
-            ],
-            per_id: '1',
-            aft_id: '1',
-            pr_list: [
-              {
-                value: '1',
-                price: 10.00,
-                number: '2',
-                label: '宝宝霜',
-              },
-              {
-                value: '2',
-                number: '3',
-                price: 30.00,
-                label: '霸王洗发露',
-              },
-            ],
-            totle: '300.00',
-          },
-        ],
+        order: [],
       }
     },
     methods: {
@@ -246,6 +183,9 @@
         }
         if(type == 's_AllList'){
           this.pr_list = data;
+        }
+        if(type == 'r_Alllist'){
+          this.r_list = data;
         }
       },
       getList(page) {

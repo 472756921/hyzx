@@ -4,6 +4,9 @@
       <Col span="4">
         <DatePicker type="date" placeholder="选择日期" style="width: 100%" v-model="date"></DatePicker>
       </Col>
+      <Col span="1">
+        <Button class="hy_btn" @click="seacher">查询</Button>
+      </Col>
       <Col span="2">
         <Button class="hy_btn" @click="newyy">新建预约</Button>
       </Col>
@@ -53,6 +56,7 @@
 
 <script type="text/ecmascript-6">
   import scheduler from '../../../static/scheduler.min';
+  import {re_Alllist} from '../../interface';
 
   export default {
     name: 're_index',
@@ -151,8 +155,27 @@
     },
     created() {
       this.showData = this.data;
+      let myDate = new Date();
+      let result = myDate.getFullYear()+'-'+(myDate.getMonth()+1)+'-'+myDate.getDate() ;
+      console.log(result)
+      this.getList(result);
     },
     methods: {
+      seacher() {},
+      getList(date) {
+        this.$ajax({
+          method: 'GET',
+          dataType: 'JSON',
+          contentType: 'application/json;charset=UTF-8',
+          headers: {
+            "authToken": sessionStorage.getItem('authToken')
+          },
+          url: re_Alllist() + '?scheduleDate=' + date,
+        }).then((res) => {
+//          this.order = res.data.results;
+        }).catch((error) => {
+        });
+      },
       sercUser(){
         this.userInfo = '已经找到用户 刘德华';
       },

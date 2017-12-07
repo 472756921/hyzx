@@ -154,5 +154,22 @@ export const p_Alllist = function () {
   return API;
 };
 
-
-
+//------------------------------------------------------------------------
+//房间列表
+export const r_list = function () {
+  const URL = '/app/api/room/findRoomList';
+  const API = host + URL;
+  return API;
+};
+//所有房间列表
+export const r_Alllist = function () {
+  const URL = '/app/api/room/findAllRoom';
+  const API = host + URL;
+  return API;
+};
+//------------------------------------------------------------------------
+export const re_Alllist = function () {
+  const URL = '/app/api/schedule/findScheduleList';
+  const API = host + URL;
+  return API;
+};

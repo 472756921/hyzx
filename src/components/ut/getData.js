@@ -2,7 +2,7 @@
  * Created by Benson on 2017/12/1.
  */
 
-import {u_Alllist, e_Alllist, s_AllList, p_Alllist} from '../../interface';
+import {u_Alllist, e_Alllist, s_AllList, p_Alllist, r_Alllist} from '../../interface';
 
 export const getAllClient = (type, _this, callBack)=>{
   let URL = '';
@@ -17,6 +17,9 @@ export const getAllClient = (type, _this, callBack)=>{
   }
   if(type == 'p_Alllist') {
     URL = p_Alllist();
+  }
+  if(type == 'r_Alllist') {
+    URL = r_Alllist();
   }
 
   _this.$ajax({
