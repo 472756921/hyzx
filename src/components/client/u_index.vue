@@ -133,7 +133,7 @@
           },
           {
             title: '年龄',
-            key: 'u_age'
+            key: 'age'
           },
           {
             title: '性别',

@@ -121,7 +121,7 @@
           },
           {
             title: '年龄',
-            key: 'e_age'
+            key: 'age'
           },
           {
             title: '类型',
@@ -143,7 +143,7 @@
           },
           {
             title: '性别',
-            key: 'e_sex'
+            key: 'gender'
           },
           {
             title: '电话号码',

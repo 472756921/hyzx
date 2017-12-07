@@ -117,7 +117,7 @@
       <br/>
       <span v-if="serCard!='修改服务单'">项目选择：</span>
       <span v-if="serCard=='修改服务单'">增加项目：</span>
-      <Select v-model="model6" multiple>
+      <Select v-model="p" multiple>
         <Option v-for="item in p_list" :value="item.id" :key="item.id">
           <span>{{ item.projectName }}</span>
           <span style="float:right;color:#ccc">￥{{ item.money }}</span>
@@ -181,18 +181,7 @@
             label: '303'
           },
         ],
-        p_list: [
-          {
-            value: '1',
-            price: '1200.00',
-            label: '美体',
-          },
-          {
-            value: '2',
-            price: '1100.00',
-            label: '嫩肤',
-          },
-        ],
+        p_list: [],
         pr_list: [
           {
             value: '1',
@@ -239,55 +228,6 @@
             ],
             per_id: '1',
             aft_id: '1',
-            pr_list: [
-              {
-                value: '1',
-                price: 10.00,
-                number: '2',
-                label: '宝宝霜',
-              },
-              {
-                value: '2',
-                number: '3',
-                price: 30.00,
-                label: '霸王洗发露',
-              },
-            ],
-            totle: '300.00',
-          },
-          {
-            orderClass: 2,
-            orderNumber: '123123232',
-            phone: 12211121212,
-            date: '2017-12-12',
-            u_name: '刘**',
-            u_id: '1',
-            live: 1,
-            servicer: '小黑',
-            e_id: '1',
-            servicerIS: 1,
-            room: '302',
-            per_sale: '小黑',
-            per_id: '1',
-            aft_sale: '小黑',
-            aft_id: '1',
-            card_lc: '美体',
-            p_name: [
-              {
-                value: '1',
-                price: 1200.00,
-                label: '美体',
-                a_o: '不懂',
-                g_h: '不懂',
-              },
-              {
-                value: '2',
-                price: 110.00,
-                label: '嫩肤',
-                a_o: '不懂',
-                g_h: '不懂',
-              },
-            ],
             pr_list: [
               {
                 value: '1',
