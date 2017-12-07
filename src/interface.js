@@ -85,6 +85,11 @@ export const ser_list = function () {
   const API = host + URL;
   return API;
 };
+export const ser_save = function () {
+  const URL = '/app/api/service/save';
+  const API = host + URL;
+  return API;
+};
 //----------------------------------------------------------------------------------------
 //投诉列表
 export const c_list = function () {

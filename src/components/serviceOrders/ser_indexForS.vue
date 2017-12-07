@@ -16,15 +16,15 @@
           <div>
             <div>
               <span class="orderTitle">
-                <span>{{ item.orderClass==1?'服务单':'匿名服务单' }}</span>
-                <span class="orderNumber">（单号：39838213478）</span>
+                <span>{{ item.anonymous?'服务单':'匿名服务单' }}</span>
+                <span class="orderNumber">（单号：{{item.serviceOrderNumber}}）</span>
               </span>
               <span class="orderDate">{{ item.date }}</span>
             </div>
             <Row :gutter="10">
               <Col  span="8">
                 <span class="orderLititle">顾客姓名：</span>
-                <span class="orderLiCon">{{ item.u_name }}</span>
+                <span class="orderLiCon">{{ item.customer }}</span>
               </Col>
               <Col  span="8">
                 <span class="orderLititle">顾客电话：</span>
@@ -36,26 +36,26 @@
               </Col>
               <Col span="8">
                 <span class="orderLititle">服务技师：</span>
-                <span class="orderLiCon">{{ item.servicer }}</span>
+                <span class="orderLiCon">{{ item.operatorName }}</span>
               </Col>
               <Col span="8">
                 <span class="orderLititle">指定：</span>
-                <span class="orderLiCon">{{ item.servicerIS==1?"是":"否" }}</span>
+                <span class="orderLiCon">{{ item.appoint==1?"是":"否" }}</span>
               </Col>
               <Col  span="8">
                 <span class="orderLititle">服务房间：</span>
-                <span class="orderLiCon">{{ item.room }}</span>
+                <span class="orderLiCon">{{ item.serviceRoom }}</span>
               </Col>
               <Col span="8">
                 <span class="orderLititle">是否售前：</span>
-                <span class="orderLiCon">{{ item.per_sale }}</span>
+                <span class="orderLiCon">{{ item.preSale==0? '否':'是' }}</span>
               </Col>
             </Row>
           </div>
           <div>
             <div class="orderLititle">项目名称：</div>
-            <div class="orderLiCon" v-for="(it,i) in item.p_name">
-              {{ it.label }} &nbsp;<span class="price">￥{{ it.price }}</span>&nbsp;&nbsp; 实操：{{it.a_o}}&nbsp;&nbsp;赠送手工：{{it.g_h}}
+            <div class="orderLiCon" v-for="(it,i) in item.project">
+              {{ it.projectName }} &nbsp;<span class="price">￥{{ it.money }}</span>
             </div>
           </div>
           <div>
@@ -66,7 +66,7 @@
             </span>
           </div>
           <div><span class="orderLititle">卡扣疗程：</span>{{item.card_lc}}</div>
-          <div class="prtotle">合计：<span class="price" style="font-size: 16px">￥{{ item.totle }}</span></div>
+          <div class="prtotle">合计：<span class="price" style="font-size: 16px">￥{{ item.cashAmount }}</span></div>
           <div  style="width: 25%;margin: 0 auto">
             <Button  class="hy_btn" @click="settlement">结算</Button>
             <Button type="ghost" @click="edit(i)">编辑</Button>
@@ -76,62 +76,59 @@
     </Row>
 
     <Modal  v-model="service" :title="serCard" @on-ok="ok"  >
-      <Checkbox v-model="single"  :disabled="serCard=='修改服务单'?true:false">匿名服务单</Checkbox>
+      <Checkbox v-model="orderINfo.isAnonymous"  :disabled="serCard=='修改服务单'?true:false">匿名服务单</Checkbox>
       <br/>
       <br/>
       <span>用户选择：</span>
-      <Select v-model="model1" filterable style="width:200px" :disabled="serCard=='修改服务单'?true:false">
+      <Select v-model="orderINfo.customerId" filterable style="width:200px" :disabled="serCard=='修改服务单'?true:false">
         <Option v-for="item in u_list" :value="item.id" :key="item.id">{{ item.realName }}</Option>
       </Select>
       <br/>
       <br/>
       <span>技师选择：</span>
-      <Select v-model="model2" filterable style="width:200px">
+      <Select v-model="orderINfo.operatorId" filterable style="width:200px">
         <Option v-for="item in e_list" :value="item.id" :key="item.id">{{ item.realName }}</Option>
       </Select>
       <br/>
       <br/>
       <span>是否指定：</span>
-      <Select v-model="model2_" style="width:200px">
+      <Select v-model="orderINfo.appoint" style="width:200px">
         <Option value="1">是</Option>
         <Option value="0">否</Option>
       </Select>
       <br/>
       <br/>
       <span>是否售前：</span>
-      <Select v-model="model4" style="width:200px">
+      <Select v-model="orderINfo.preSale" style="width:200px">
         <Option value="1">是</Option>
         <Option value="0">否</Option>
       </Select>
       <br/>
       <br/>
       <span>房间选择：</span>
-      <Select v-model="model5" style="width:200px">
+      <Select v-model="orderINfo.roomId" style="width:200px">
         <Option v-for="item in r_list" :value="item.label" :key="item.label">{{ item.label }}</Option>
       </Select>
       <br/>
       <br/>
       <span>服务时间：</span>
-      <DatePicker type="datetime" placeholder="选择日期" style="width: 200px" v-model="serviceDate"></DatePicker>
+      <DatePicker type="datetime" placeholder="选择日期" style="width: 200px" v-model="orderINfo.serviceDate"></DatePicker>
       <br/>
       <br/>
       <span v-if="serCard!='修改服务单'">项目选择：</span>
       <span v-if="serCard=='修改服务单'">增加项目：</span>
-      <Select v-model="p" multiple>
+      <Select v-model="orderINfo.project" multiple>
         <Option v-for="item in p_list" :value="item.id" :key="item.id">
           <span>{{ item.projectName }}</span>
-          <span style="float:right;color:#ccc">￥{{ item.money }}</span>
+          <span style="float:right;color:#ccc">￥{{ item.courseMoney }}</span>
         </Option>
       </Select>
       <br/>
       <br/>
       <div v-if="serCard=='修改服务单'">已选项目：
-        <span v-for="item in model8">{{ item.label }} <span class="price" >￥{{ item.price }}</span>&nbsp;&nbsp;</span>
+        <span v-for="item in p_list">{{ item.projectName }} <span class="price" >￥{{ item.money }}</span>&nbsp;&nbsp;</span>
       </div>
       <br/>
-      <div v-if="serCard=='修改服务单'">已选项目：
-        <span v-for="item in model9">{{ item.label }} <span class="price" >￥{{ item.price }}</span>&nbsp;&nbsp;</span>
-      </div>
     </Modal>
 
     <Modal  v-model="settlementF" title="结算" @on-ok="sok">
@@ -141,7 +138,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {ser_list} from '../../interface';
+  import {ser_list, ser_save} from '../../interface';
 
   export default {
     name: 'ser_indexForS',
@@ -156,19 +153,19 @@
       return {
         serCard: '创建服务单',
         serser: '',
-        serviceDate: '',
         service: false,
-        single: false,
         settlementF: false,
-        model1: '',
-        model2: '',
-        model2_: '',
-        model4: '',
-        model5: '',
-        model6: [],
-        model7: [],
-        model8: [],
-        model9: [],
+        orderINfo: {
+          isAnonymous: false, //匿名
+          customerId: '',
+          operatorId: '',  //技师
+          appoint: '',
+          roomId: '',
+          orderType: '2',
+          project: [],
+          serviceDate: '',
+          preSale: '',
+        },
         u_list: [],
         e_list: [],
         r_list: [
@@ -182,18 +179,7 @@
           },
         ],
         p_list: [],
-        pr_list: [
-          {
-            value: '1',
-            price: '10.00',
-            label: '宝宝霜',
-          },
-          {
-            value: '2',
-            price: '30.00',
-            label: '霸王洗发露',
-          },
-        ],
+        pr_list: [],
         order: [
           {
             orderClass: 1,
@@ -272,12 +258,36 @@
           },
           url: ser_list() + '?page='+page+'&pageSize=50',
         }).then((res) => {
-//          this.order = res.data.results;
+          this.order = res.data.results;
         }).catch((error) => {
         });
       },
       ok() {
-        console.log(this.model1);
+        this.orderINfo.serviceDate = new Date(this.orderINfo.serviceDate).Format('yyyy-MM-dd')
+        for (let variable in this.orderINfo) {
+          if (this.orderINfo[variable] === '' || this.orderINfo[variable] === null) {
+            this.$Message.warning('请完整填写服务单');
+            return false
+          }
+        }
+        let data = [];
+        for (let it in this.orderINfo.project) {
+          data = [...data,{projectId: this.orderINfo.project[it]} ]
+        }
+        this.orderINfo.project = data;
+        this.$ajax({
+          method: 'POST',
+          dataType: 'JSON',
+          headers: {
+            "authToken": sessionStorage.getItem('authToken')
+          },
+          data: this.orderINfo,
+          contentType: 'application/json;charset=UTF-8',
+          url: ser_save(),
+        }).then((res) => {
+          this.$Message.success('操作成功');
+        }).catch((error) => {
+        });
       },
       serc() {    //搜索
         if (this.name == '') {
@@ -287,32 +297,10 @@
       newEm() {
         this.serCard = '新建服务单';
         this.service = true;
-        this.single = false;
-        this.model1 = '';
-        this.model2 = '';
-        this.model4 = '';
-        this.serviceDate = '';
-        this.model5 = '';
-        this.model6 = [];
-        this.model7 = [];
-        this.model8 = [];
-        this.model9 = [];
       },
       edit(i) {
         this.serCard = '修改服务单';
         this.service = true;
-        const tem = this.order[i];
-        if(tem.orderClass == 2){
-          this.single = true;
-        } else {
-          this.single = false;
-        }
-        this.model1 = tem.u_id;
-        this.model2 = tem.e_id;
-        this.model4 = tem.aft_id;
-        this.model5 = tem.room;
-        this.model8 = tem.p_name;
-        this.model9 = tem.pr_list;
         this.serviceDate = tem.date;
       },
       settlement() {
