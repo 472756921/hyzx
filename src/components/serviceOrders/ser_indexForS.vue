@@ -24,7 +24,7 @@
             <Row :gutter="10">
               <Col  span="8">
                 <span class="orderLititle">顾客姓名：</span>
-                <span class="orderLiCon">{{ item.customer }}</span>
+                <span class="orderLiCon">{{ item.anonymous?item.customer:item.customer[0]+'**' }}</span>
               </Col>
               <Col  span="8">
                 <span class="orderLititle">顾客电话：</span>
@@ -32,7 +32,7 @@
               </Col>
               <Col  span="8">
                 <span class="orderLititle">顾客等级：</span>
-                <span class="orderLiCon">{{ item.live==0?'非会员':item.live==1?'普通会员':item.live==2?'白银会员':'黄金会员' }}</span>
+                <span class="orderLiCon">{{ item.level}}</span>
               </Col>
               <Col span="8">
                 <span class="orderLititle">服务技师：</span>
@@ -50,18 +50,24 @@
                 <span class="orderLititle">是否售前：</span>
                 <span class="orderLiCon">{{ item.preSale==0? '否':'是' }}</span>
               </Col>
+              <Col span="8">
+                <span class="orderLititle">创建时间：</span>
+                <span class="orderLiCon">{{ item.createTime }}</span>
+              </Col>
             </Row>
           </div>
-          <div>
-            <div class="orderLititle">项目名称：</div>
-            <div class="orderLiCon" v-for="(it,i) in item.project">
+          <div v-if="item.project.length!=0">
+            <div class="orderLititle">非卡扣项目：</div>
+            <div class="orderLiCon" v-for="(it,i) in item.project" style="background: #f7f7f7;padding: 10px">
               {{ it.projectName }} &nbsp;<span class="price">￥{{ it.money }}</span>
             </div>
           </div>
-          <div><span class="orderLititle">卡扣疗程：</span>
-            {{item.card_lc}}
+          <div v-if="item.cardProject.length!=0"><span class="orderLititle">卡扣项目：</span>
+            <div class="orderLiCon" v-for="(it,i) in item.cardProject" style="background: #f7f7f7;padding: 10px">
+              {{ it.projectName }} &nbsp;<span class="price">￥{{ it.money }}</span>
+            </div>
           </div>
-          <div class="prtotle">合计：<span class="price" style="font-size: 16px">￥{{ item.cashAmount }}</span></div>
+          <div class="prtotle">储值卡付款合计：<span class="price" style="font-size: 16px">￥{{ item.cashAmount }}</span></div>
           <div  style="width: 25%;margin: 0 auto">
             <Button  class="hy_btn" @click="settlement">结算</Button>
             <Button type="ghost" @click="edit(i)">编辑</Button>
@@ -76,13 +82,13 @@
       <br/>
       <span>用户选择：</span>
       <Select v-model="orderINfo.customerId" filterable style="width:200px" :disabled="serCard=='修改服务单'?true:false">
-        <Option v-for="item in u_list" :value="item.id" :key="item.id">{{ item.realName }}</Option>
+        <Option v-for="item in u_list" :value="item.id" :key="item.id">{{ item.realName }} - {{item.phoneNumber}}</Option>
       </Select>
       <br/>
       <br/>
       <span>技师选择：</span>
       <Select v-model="orderINfo.operatorId" filterable style="width:200px">
-        <Option v-for="item in e_list" :value="item.id" :key="item.id">{{ item.realName }}</Option>
+        <Option v-for="item in e_list" :value="item.id" :key="item.id">{{ item.realName }} - {{item.phoneNumber}}</Option>
       </Select>
       <br/>
       <br/>
@@ -106,12 +112,8 @@
       </Select>
       <br/>
       <br/>
-      <span>服务时间：</span>
-      <DatePicker type="datetime" placeholder="选择日期" style="width: 200px" v-model="orderINfo.serviceDate"></DatePicker>
-      <br/>
-      <br/>
       <span v-if="serCard!='修改服务单'">项目选择：</span>
-      <span v-if="serCard=='修改服务单'">增加项目：</span>
+      <span v-if="serCard=='修改服务单'">修改项目（原项目将被删除）：</span>
       <Select v-model="orderINfo.project" multiple>
         <Option v-for="item in p_list" :value="item.id" :key="item.id">
           <span>{{ item.projectName }}</span>
@@ -121,7 +123,7 @@
       <br/>
       <br/>
       <div v-if="serCard=='修改服务单'">已选项目：
-        <span v-for="item in p_list">{{ item.projectName }} <span class="price" >￥{{ item.money }}</span>&nbsp;&nbsp;</span>
+        <span v-for="item in p_list">{{ item.projectName }} <span class="price" >￥{{ item.courseMoney }}</span>&nbsp;&nbsp;</span>
       </div>
       <br/>
     </Modal>
@@ -133,7 +135,7 @@
 </template>
 
 <script type="text/ecmascript-6">
-  import {ser_list, ser_save} from '../../interface';
+  import {ser_list, ser_save, ser_Over} from '../../interface';
 
   export default {
     name: 'ser_indexForS',
@@ -159,7 +161,7 @@
           roomId: '',
           orderType: '2',
           project: [],
-          serviceDate: '',
+          createTime: '',
           preSale: '',
         },
         u_list: [],
@@ -196,14 +198,13 @@
           headers: {
             "authToken": sessionStorage.getItem('authToken')
           },
-          url: ser_list() + '?page='+page+'&pageSize=50',
+          url: ser_list() + '?page='+page+'&pageSize=50&orderType=2',
         }).then((res) => {
           this.order = res.data.results;
         }).catch((error) => {
         });
       },
       ok() {
-        this.orderINfo.serviceDate = new Date(this.orderINfo.serviceDate).Format('yyyy-MM-dd')
         for (let variable in this.orderINfo) {
           if (this.orderINfo[variable] === '' || this.orderINfo[variable] === null) {
             this.$Message.warning('请完整填写服务单');
@@ -237,11 +238,23 @@
       newEm() {
         this.serCard = '新建服务单';
         this.service = true;
+        this.orderINfo = {
+          isAnonymous: false, //匿名
+          customerId: '',
+          operatorId: '',  //技师
+          appoint: '',
+          roomId: '',
+          orderType: '2',
+          project: [],
+          createTime: '',
+          preSale: '',
+        };
       },
       edit(i) {
-        this.serCard = '修改服务单';
-        this.service = true;
-        this.serviceDate = tem.date;
+        this.$Message.warning('暂不提供编辑功能');
+//        this.serCard = '修改服务单';
+//        this.service = true;
+//        this.orderINfo = this.order[i];
       },
       settlement() {
         this.settlementF = true;
@@ -249,6 +262,7 @@
       sok() {
         var r=confirm("您确定结算该服务单 ？")
         if(r) {
+
           this.$Message.info({content:'结算完成，请用户签字', duration: 3});
         }
       },

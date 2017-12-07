@@ -90,6 +90,11 @@ export const ser_save = function () {
   const API = host + URL;
   return API;
 };
+export const ser_Over = function () {
+  const URL = '/app/api/service/settlement';
+  const API = host + URL;
+  return API;
+};
 //----------------------------------------------------------------------------------------
 //投诉列表
 export const c_list = function () {
@@ -168,8 +173,15 @@ export const r_Alllist = function () {
   return API;
 };
 //------------------------------------------------------------------------
+//预约查询
 export const re_Alllist = function () {
   const URL = '/app/api/schedule/findScheduleList';
+  const API = host + URL;
+  return API;
+};
+//新增预约
+export const re_save = function () {
+  const URL = '/app/api/schedule/save';
   const API = host + URL;
   return API;
 };

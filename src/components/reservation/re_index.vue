@@ -13,7 +13,7 @@
     </Row>
     <div id='calendar'></div>
 
-    <Modal v-model="model1" title="新建预约" @on-ok="ok">
+    <Modal v-model="model1" :title="text" @on-ok="ok">
       <div>开始时间</div>
       <DatePicker type="datetime" v-model="newDate" placeholder="选择预约日期和时间" :options="options" style="width: 200px"></DatePicker>
       <br/>
@@ -24,29 +24,26 @@
       <br/>
       <div>服务项目</div>
       <Select v-model="model2" style="width:200px">
-        <Option v-for="(item, i) in e_list" :value="item.value" :key="i">{{ item.label }}</Option>
+        <Option v-for="item in p_list" :value="item.id" :key="item.id">{{ item.projectName }}</Option>
       </Select>
       <br/>
       <br/>
       <div>技师</div>
-      <Select v-model="model5" style="width:200px">
-        <Option value="a">技师A</Option>
-        <Option value="b">技师B</Option>
-        <Option value="c">技师C</Option>
-        <Option value="d">技师D</Option>
-        <Option value="e">技师E</Option>
-        <Option value="f">技师F</Option>
+      <Select v-model="model5" style="width:200px" >
+        <Option v-for="item in e_list" :value="item.id" :key="item.id">{{ item.realName }} - {{item.phoneNumber}}</Option>
       </Select>
       <br/>
       <br/>
       <div>服务房间</div>
       <Select v-model="model3" style="width:200px">
-        <Option v-for="(item, i) in r_list" :value="item.value" :key="i">{{ item.label }}</Option>
+        <Option v-for="(item, i) in r_list" :value="item.id" :key="i">{{ item.roomName }}</Option>
       </Select>
       <br/>
       <br/>
-      <div>用户</div>
-      <Input v-model="model4" placeholder="请输入用户电话号码"  style="width:200px"><Button slot="append" icon="ios-search" @click="sercUser"></Button></Input>
+      <div>用户选择</div>
+      <Select v-model="model4" filterable style="width:200px" >
+        <Option v-for="item in u_list" :value="item.id" :key="item.id">{{ item.realName }} - {{item.phoneNumber}}</Option>
+      </Select>
       <div style="margin: 6px 0">{{userInfo}}</div>
       <br/>
       <Button v-if="transformF" type="success">生成服务单</Button>
@@ -56,7 +53,7 @@
 
 <script type="text/ecmascript-6">
   import scheduler from '../../../static/scheduler.min';
-  import {re_Alllist} from '../../interface';
+  import {re_Alllist, re_save} from '../../interface';
 
   export default {
     name: 're_index',
@@ -69,23 +66,15 @@
         model3: '',
         model4: '',
         model5: '',
+        text: '新建预约',
         userInfo: '',
         date: '',
         transformF: false,
-        e_list: [{
-            value: '美白',
-            label: '美白',
-          },{
-            value: '嫩肤',
-            label: '嫩肤',
-        },],
-        r_list: [{
-            value: 301,
-            label: '301',
-          },{
-            value: 302,
-            label: '302',
-        },],
+        p_list: [],
+        e_list: [],
+        e_listTable: [],
+        r_list: [],
+        u_list: [],
         options: {
           disabledDate (date) {
             return date && date.valueOf() < Date.now() - 86400000;
@@ -109,58 +98,76 @@
       }
     },
     mounted() {
-      $('#calendar').fullCalendar({
-        defaultView: 'agendaDay',
-        minTime: '07:00:00',
-        maxTime: '22:00:00',
-        timeFormat: 'H:mm',
-        aspectRatio: 2.4,
-        monthNames: ['01','02','03','04','05','06','07','08','09','10','11','12'],
-        monthNamesShort: ['01','02','03','04','05','06','07','08','09','10','11','12'],
-        dayNames: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
-        dayNamesShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
-        buttonText: {
-          today: '今天',
-          month: '月',
-          week: '周',
-          day: '日',
-        },
-        titleFormat: 'YYYY - MM - DD',
-        allDayText: '全天',
-        header: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'agendaDay'
-        },
-        resources: [
-          { id: 'a', title: '技师 A' },
-          { id: 'b', title: '技师 B' },
-          { id: 'c', title: '技师 C' },
-          { id: 'd', title: '技师 D' },
-          { id: 'e', title: '技师 E', eventColor: '#eee', eventTextColor: '#333' },
-          { id: 'f', title: '技师 F', eventColor: '#eee', eventTextColor: '#333' },
-        ],
-        events: this.events,
-        eventClick: (calEvent, jsEvent, view)=>{
-          if(calEvent.title == "休假") {
-            return false;
-          }
-          this.transformF = true;
-          this.model1 = true;
-        },
-        dayClick: (calEvent, jsEvent, view)=>{
-          this.newyy();
-        },
-      });
+
     },
     created() {
       this.showData = this.data;
       let myDate = new Date();
       let result = myDate.getFullYear()+'-'+(myDate.getMonth()+1)+'-'+myDate.getDate() ;
-      console.log(result)
       this.getList(result);
+      this.GetData('u_Alllist',this, this.setData);
+      this.GetData('e_Alllist',this, this.setData);
+      this.GetData('r_Alllist',this, this.setData);
+      this.GetData('p_Alllist',this, this.setData);
     },
     methods: {
+      createdTable() {
+        $('#calendar').fullCalendar({
+          defaultView: 'agendaDay',
+          minTime: '07:00:00',
+          maxTime: '22:00:00',
+          timeFormat: 'H:mm',
+          aspectRatio: 2.4,
+          monthNames: ['01','02','03','04','05','06','07','08','09','10','11','12'],
+          monthNamesShort: ['01','02','03','04','05','06','07','08','09','10','11','12'],
+          dayNames: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
+          dayNamesShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
+          buttonText: {
+            today: '今天',
+            month: '月',
+            week: '周',
+            day: '日',
+          },
+          titleFormat: 'YYYY - MM - DD',
+          allDayText: '全天',
+          header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'agendaDay'
+          },
+          resources: this.e_listTable,
+          events: this.events,
+          eventClick: (calEvent, jsEvent, view)=>{
+            if(calEvent.title == "休假") {
+              return false;
+            }
+            this.transformF = true;
+            this.model1 = true;
+            this.text = '修改预约';
+          },
+          dayClick: (calEvent, jsEvent, view)=>{
+            this.newyy();
+          },
+        });
+      },
+      setData(data, type) {
+        if(type == 'u_Alllist'){
+          this.u_list = data;
+        }
+        if(type == 'e_Alllist'){
+          this.e_list = data;
+          for (let data in this.e_list) {
+            this.e_listTable = [...this.e_listTable, {id: this.e_list[data].id, title: this.e_list[data].realName}];
+          }
+          this.createdTable()
+        }
+        if(type == 'r_Alllist'){
+          this.r_list = data;
+        }
+        if(type == 'p_Alllist'){
+          this.p_list = data;
+        }
+      },
       seacher() {},
       getList(date) {
         this.$ajax({
@@ -203,12 +210,39 @@
           this.$Message.error('请完整填写预约信息');
           return false
         }
+        this.newDate = new Date(this.newDate).Format('yyyy-MM-dd hh:mm')
+        this.newDate2 = new Date(this.newDate2).Format('yyyy-MM-dd hh:mm')
+
+        if(this.text == '修改预约'){
+          return false;
+        }
+        this.$ajax({
+          method: 'POST',
+          dataType: 'JSON',
+          headers: {
+            "authToken": sessionStorage.getItem('authToken')
+          },
+          data: {
+            scheduleDate: this.newDate,
+            scheduleEndDate: this.newDate2,
+            roomId: this.model3,
+            customerId: this.model4,
+            staffId: this.model5,
+            projectId: this.model2,
+          },
+          contentType: 'application/json;charset=UTF-8',
+          url: re_save(),
+        }).then((res) => {
+          this.$Message.success('操作成功');
+        }).catch((error) => {
+        });
+
         const events = {
             id: '23',
             resourceId: this.model5,
             start: this.newDate,
             end: this.newDate2,
-            title: this.model2 + '/' +this.model3 + '/' +this.model4,
+            title: this.p_list.find( (i) => {if (i.id == this.model2) {return i}}).projectName + '/' +this.r_list.find( (i) => {if (i.id == this.model3) {return i}}).roomName + '/' +this.u_list.find( (i) => {if (i.id == this.model4) {return i}}).realName + "-" +this.u_list.find( (i) => {if (i.id == this.model4) {return i}}).phoneNumber,
             color: '#38925E',
             textColor: '#eee',
           };
