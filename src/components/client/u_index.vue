@@ -146,17 +146,6 @@
           {
             title: '等级',
             key: 'level',
-//            render: (h, params) => {
-//              if(params.row.level == 1){
-//                return ("普通会员");
-//              }
-//              if(params.row.level == 2){
-//                return ("白银会员");
-//              }
-//              if(params.row.level == 3){
-//                return ("黄金会员");
-//              }
-//            }
           },
           {
             title: '操作',
@@ -165,20 +154,20 @@
             align: 'center',
             render: (h, params) => {
               return h('div', [
-                h('Button', {
-                  props: {
-                    type: 'success',
-                    size: 'small'
-                  },
-                  style: {
-                    marginRight: '5px'
-                  },
-                  on: {
-                    click: () => {
-                      this.createService(params.index)
-                    }
-                  }
-                }, '创建服务单'),
+//                h('Button', {
+//                  props: {
+//                    type: 'success',
+//                    size: 'small'
+//                  },
+//                  style: {
+//                    marginRight: '5px'
+//                  },
+//                  on: {
+//                    click: () => {
+//                      this.createService(params.index)
+//                    }
+//                  }
+//                }, '创建服务单'),
                 h('Button', {
                   props: {
                     type: 'primary',
@@ -336,7 +325,7 @@
         this.user =  this.data[index];
       },
       datile(index) {
-        this.$router.push({path:'u_datile/'+this.data[index].u_id});
+        this.$router.push({path:'u_datile/'+this.data[index].id});
       },
       ok() {   //
 

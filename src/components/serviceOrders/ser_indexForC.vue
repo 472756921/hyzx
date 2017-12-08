@@ -17,7 +17,7 @@
           <div>
               <span class="orderTitle">
                 <span>{{ item.anonymous?'现金单':'匿名现金单' }}</span>
-                <span class="orderNumber">（单号：{{item.serviceOrderNumber}}）</span>
+                <span class="orderNumber">（单号：{{item.serviceOrderNumber}} 创建时间：{{item.createTime}}）</span>
               </span>
             <span class="orderDate">{{ item.date }}</span>
           </div>

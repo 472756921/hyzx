@@ -25,6 +25,8 @@
 </template>
 
 <script type="text/ecmascript-6">
+  import {ser_cardList} from '../../interface';
+
   export default {
     name: 'u_cardList',
     data(){
@@ -91,7 +93,25 @@
         ],
       }
     },
+    created() {
+      this.userID = this.$route.params.u_id;
+      this.getList(1,  this.userID);
+    },
     methods: {
+      getList(page, uid) {
+        this.$ajax({
+          method: 'GET',
+          dataType: 'JSON',
+          contentType: 'application/json;charset=UTF-8',
+          headers: {
+            "authToken": sessionStorage.getItem('authToken')
+          },
+          url: ser_cardList() + '?id=' + uid +"&page="+page+"&pageSize=50",
+        }).then((res) => {
+          this.serviceData = res.data.results;
+        }).catch((error) => {
+        });
+      },
       newqu() {
         this.newCardF = true;
       },

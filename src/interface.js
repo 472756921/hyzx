@@ -78,6 +78,25 @@ export const u_edit = function () {
   const API = host + URL;
   return API;
 };
+
+//用户ID查询消费
+export const ser_Bill = function () {
+  const URL = '/app/api/customer/findBillById';
+  const API = host + URL;
+  return API;
+};
+//用户现有卡情况
+export const ser_cardList = function () {
+  const URL = '/app/api/customer/findOwningCardById';
+  const API = host + URL;
+  return API;
+};
+//用户现有卡情况
+export const ser_findById = function () {
+  const URL = '/app/api/customer/findById';
+  const API = host + URL;
+  return API;
+};
 //----------------------------------------------------------------------------------------
 //服务单列表
 export const ser_list = function () {
@@ -87,6 +106,12 @@ export const ser_list = function () {
 };
 export const ser_save = function () {
   const URL = '/app/api/service/save';
+  const API = host + URL;
+  return API;
+};
+//用户ID查询服务单
+export const ser_OverByUserID = function () {
+  const URL = '/app/api/service/findByCustomerId';
   const API = host + URL;
   return API;
 };
@@ -105,6 +130,12 @@ export const c_list = function () {
 //新增投诉
 export const c_save = function () {
   const URL = '/app/api/complaints/save';
+  const API = host + URL;
+  return API;
+};
+//投诉处理
+export const c_handle = function () {
+  const URL = '/app/api/complaints/handle';
   const API = host + URL;
   return API;
 };
@@ -182,6 +213,12 @@ export const re_Alllist = function () {
 //新增预约
 export const re_save = function () {
   const URL = '/app/api/schedule/save';
+  const API = host + URL;
+  return API;
+};
+//预约转服务单
+export const re_toOrder = function () {
+  const URL = '/app/api/schedule/toServiceOrder';
   const API = host + URL;
   return API;
 };

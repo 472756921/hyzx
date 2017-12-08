@@ -46,19 +46,20 @@
       </Select>
       <div style="margin: 6px 0">{{userInfo}}</div>
       <br/>
-      <Button v-if="transformF" type="success">生成服务单</Button>
+      <Button v-if="transformF" type="success" @click="createdOrder">生成服务单</Button>
     </Modal>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import scheduler from '../../../static/scheduler.min';
-  import {re_Alllist, re_save} from '../../interface';
+  import {re_Alllist, re_save, re_toOrder} from '../../interface';
 
   export default {
     name: 're_index',
     data () {
       return {
+        orderID: '',
         newDate: '',
         newDate2: '',
         model1: false,
@@ -75,30 +76,16 @@
         e_listTable: [],
         r_list: [],
         u_list: [],
+        e_listColor: ['#F6D600', '#38925E', '#ff0000', '#38925E', '#38925E', ''],
         options: {
           disabledDate (date) {
             return date && date.valueOf() < Date.now() - 86400000;
           }
         },
-        events: [
-          { id: '1', resourceId: 'a', start: '2017-10-27 09:00', end: '2017-10-27 10:00', title: '302/刘德华/护理',color: '#F6D600', textColor: '#666', },
-          { id: '11', resourceId: 'a', start: '2017-10-27 10:30', end: '2017-10-27 11:30', title: '302/刘德华/护理',color: '#38925E', textColor: '#eee', },
-          { id: '12', resourceId: 'a', start: '2017-10-27 11:30', end: '2017-10-27 13:00', title: '302/刘德华/护理',color: '#ff0000', textColor: '#eee', },
-          { id: '13', resourceId: 'a', start: '2017-10-27 14:00', end: '2017-10-27 16:00', title: '302/刘德华/护理',color: '#38925E', textColor: '#eee', },
-          { id: '13', resourceId: 'a', start: '2017-10-27 18:00', end: '2017-10-27 19:30', title: '302/刘德华/护理',color: '#38925E', textColor: '#eee', },
-
-          { id: '2', resourceId: 'b', start: '2017-10-27 07:00', end: '2017-10-27 09:00', title: '302/刘德华/护理',color: '#F6D600', textColor: '#666', },
-          { id: '21', resourceId: 'b', start: '2017-10-27 10:30', end: '2017-10-27 11:30', title: '302/刘德华/护理',color: '#38925E', textColor: '#eee', },
-          { id: '22', resourceId: 'b', start: '2017-10-27 14:00', end: '2017-10-27 15:00', title: '302/刘德华/护理',color: '#ff0000', textColor: '#eee', },
-          { id: '23', resourceId: 'b', start: '2017-10-28 09:00', end: '2017-10-28 11:00', title: '302/刘德华/护理',color: '#38925E', textColor: '#eee', },
-
-          { id: '5', resourceId: 'e', start: '2017-10-28 07:00', end: '2017-10-28 22:00', title: '休假' },
-          { id: '5', resourceId: 'f', start: '2017-10-28 07:00', end: '2017-10-28 22:00', title: '休假' },
-        ],
+        events: [],
       }
     },
     mounted() {
-
     },
     created() {
       this.showData = this.data;
@@ -111,6 +98,29 @@
       this.GetData('p_Alllist',this, this.setData);
     },
     methods: {
+      createdOrder() {
+        this.$ajax({
+          method: 'GET',
+          dataType: 'JSON',
+          headers: {
+            "authToken": sessionStorage.getItem('authToken')
+          },
+          data: {id : this.orderID},
+          contentType: 'application/json;charset=UTF-8',
+          url: re_toOrder(),
+        }).then((res) => {
+          this.$Message.success('操作成功');
+        }).catch((error) => {
+        });
+      },
+      createdEvent(data) {
+        data.data.forEach( (it, i) => {
+          it.json.forEach( (ite, ie) => {
+            this.events = [...this.events, { newDate: ite.scheduleDate, newDate2: ite.scheduleEndDate ,model2: ite.projectId, model5: ite.staffId, model3:ite.roomId, model4: ite.customerId, id: ite.id, resourceId: ite.staffId, start: ite.scheduleDate, end: ite.scheduleEndDate, title: ite.customerName+'/'+ite.roomName+ '/' + ite.projectName, color: '#38925E', textColor: '#eee', }];
+          })
+        })
+        setTimeout(()=>{this.createdTable();}, 1000)
+      },
       createdTable() {
         $('#calendar').fullCalendar({
           defaultView: 'agendaDay',
@@ -144,6 +154,13 @@
             this.transformF = true;
             this.model1 = true;
             this.text = '修改预约';
+            this.newDate = calEvent.newDate;
+            this.newDate2 = calEvent.newDate2;
+            this.model2 = calEvent.model2;
+            this.model3 = calEvent.model3;
+            this.model4 = calEvent.model4;
+            this.model5 = calEvent.model5;
+            this.orderID = calEvent.id;
           },
           dayClick: (calEvent, jsEvent, view)=>{
             this.newyy();
@@ -159,7 +176,6 @@
           for (let data in this.e_list) {
             this.e_listTable = [...this.e_listTable, {id: this.e_list[data].id, title: this.e_list[data].realName}];
           }
-          this.createdTable()
         }
         if(type == 'r_Alllist'){
           this.r_list = data;
@@ -177,9 +193,11 @@
           headers: {
             "authToken": sessionStorage.getItem('authToken')
           },
-          url: re_Alllist() + '?scheduleDate=' + date,
+          url: re_Alllist()
         }).then((res) => {
-//          this.order = res.data.results;
+
+//          this.createdTable();
+          this.createdEvent(res);
         }).catch((error) => {
         });
       },
