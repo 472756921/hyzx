@@ -42,7 +42,7 @@
         },
         service: [
           {key: 'billTime', title: '日期'},
-          {key: 'serviceOrderNumber', title: '服务单号'},
+          {key: 'serviceOrderListJson.serviceOrderNumber', title: '服务单号'},
           {key: 'operatorName', title: '技师'},
           {key: 'serviceRoom', title: '房间'},
           {
