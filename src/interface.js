@@ -97,6 +97,12 @@ export const ser_findById = function () {
   const API = host + URL;
   return API;
 };
+//各类问题描述
+export const ser_Problem = function () {
+  const URL = '/app/api/customer/findAllProblem';
+  const API = host + URL;
+  return API;
+};
 //----------------------------------------------------------------------------------------
 //服务单列表
 export const ser_list = function () {
