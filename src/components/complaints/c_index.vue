@@ -81,7 +81,7 @@
       <br/>
       <br/>
       <span v-if="emclass=='投诉详情'">解决方案</span>
-      <Input v-if="emclass!='新建投诉'" v-model="model4" type="textarea" :autosize="{minRows: 3,maxRows: 6}"  :readonly="emclass=='投诉详情'?true:false" placeholder="请输入投诉内容..."/>
+      <Input v-if="emclass!='新建投诉'" v-model="model4" type="textarea" :autosize="{minRows: 3,maxRows: 6}"  :readonly="emclass=='投诉详情'?true:false" placeholder="请输入处理方案..."/>
     </Modal>
   </div>
 </template>
@@ -93,50 +93,7 @@
     name: 'c_index',
     data () {
       return {
-        order: {
-          orderClass: 1,
-          orderNumber: '123123232',
-          live: 1,
-          phone: 12211121212,
-          date: '2017-12-12',
-          u_name: '王小虎',
-          u_id: '2',
-          servicer: '小黑',
-          e_id: '1',
-          servicerIS: 1,
-          room: '303',
-          per_sale: '小黑',
-          aft_sale: '小黑',
-          p_name: [
-            {
-              value: '1',
-              price: '1200.00',
-              label: '美体',
-            },
-            {
-              value: '2',
-              price: '1100.00',
-              label: '嫩肤',
-            },
-          ],
-          per_id: '1',
-          aft_id: '1',
-          pr_list: [
-            {
-              value: '1',
-              price: '10.00',
-              number: '2',
-              label: '宝宝霜',
-            },
-            {
-              value: '2',
-              number: '3',
-              price: '30.00',
-              label: '霸王洗发露',
-            },
-          ],
-          totle: '300.00',
-        },
+        order: {},
         u_name: '',
         emclass: '',
         e_id: '',
@@ -301,6 +258,7 @@
         this.model2 = this.data[index].id;
         this.e_id = this.data[index].btsrId;
         this.model3 = this.data[index].complaintsReason;
+        this.model4 = '';
         this.emclass = '投诉处理';
       },
       remove (index) {

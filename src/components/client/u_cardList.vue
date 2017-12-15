@@ -4,7 +4,6 @@
     <br/>
     <br/>
     <Table :columns="cards" :data="cardsData" :row-class-name="rowClassName"></Table>
-    <Page :current="2" :total="50" simple class="center"></Page>
     <Modal v-model="newCardF" title="新增卡">
       <div>请选择新增类型</div>
       <RadioGroup v-model="radio">
@@ -36,14 +35,10 @@
         radio: 1,
         optortion: 1,
         cards: [
-          {key: 'date', title: '购卡日期'},
-          {key: 'endDate', title: '过期日期'},
-          {key: 'type', title: '卡类'},
-          {key: 'times', title: '剩余次数'},
+          {key: 'openTime', title: '购卡日期'},
+          {key: 'endTime', title: '过期日期'},
+          {key: 'cardName', title: '卡类'},
           {key: 'status', title: '状态', render: (h, p)=>{if(p.row.status == 1){return '正常'}else if(p.row.status == 0){return '禁用'}else if(p.row.status == 2){return '过期'}}},
-          {key: 'other', title: '备注'},
-          {key: 'money', title: '现金券'},
-          {key: 'gift', title: '赠送项目'},
           {key: 'action', title: '操作',render: (h, params) => {
             return h('div', [
               h('Button', {
@@ -108,7 +103,7 @@
           },
           url: ser_cardList() + '?id=' + uid +"&page="+page+"&pageSize=50",
         }).then((res) => {
-//          this.cardsData = res.data.results;
+          this.cardsData = res.data.results;
         }).catch((error) => {
         });
       },

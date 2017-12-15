@@ -2,8 +2,6 @@
   <div style="min-height: 300px">
     <DatePicker :value="date" format="yyyy-MM-dd" type="date" placeholder="选择日期" @on-change="getDate"></DatePicker>
     <Button class="hy_btn" @click="getList">查询</Button>
-    <br/>
-    <br/>
   </div>
 </template>
 

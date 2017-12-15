@@ -259,5 +259,11 @@ export const re_day = function () {
   const API = host + URL;
   return API;
 };
+//月报表
+export const re_mouth = function () {
+  const URL = '/app/api/report/findMouthList';
+  const API = host + URL;
+  return API;
+};
 
 
