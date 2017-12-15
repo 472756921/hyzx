@@ -109,6 +109,24 @@ export const ser_UserProblem = function () {
   const API = host + URL;
   return API;
 };
+//保存用户的问题
+export const ser_ProblemSave = function () {
+  const URL = '/app/api/customer/problemSave';
+  const API = host + URL;
+  return API;
+};
+//获取解决方案
+export const ser_findPlan = function () {
+  const URL = '/app/api/customer/findPlan';
+  const API = host + URL;
+  return API;
+};
+//保存方案
+export const ser_problemBegin = function () {
+  const URL = '/app/api/customer/problemBegin';
+  const API = host + URL;
+  return API;
+};
 //----------------------------------------------------------------------------------------
 //服务单列表
 export const ser_list = function () {

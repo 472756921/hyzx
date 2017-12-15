@@ -4,16 +4,8 @@
     <br/>
     <br/>
     <Table :columns="question" :data="questionData" style="width: 100%;margin: 0!important;"></Table>
-    <Page :current="2" :total="50" simple class="center"></Page>
 
-    <Modal v-model="wayf" title="解决方案">
-      <div>问题描述：</div>
-      <Input v-model="newquestion" :disabled="waysF" type="textarea" :autosize="{minRows: 2,maxRows: 5}"/>
-      <div style="margin-top: 10px">
-        <div>检测报告：</div>
-        <img src="https://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar" width="60px" @click="showImg('a42bdcc1178e62b4694c830f028db5c0')" class="pointer" title="点击查看大图">
-        <img src="https://o5wwk8baw.qnssl.com/a42bdcc1178e62b4694c830f028db5c0/avatar" width="60px" @click="showImg('a42bdcc1178e62b4694c830f028db5c0')" class="pointer" title="点击查看大图">
-      </div>
+    <Modal v-model="wayf" title="解决方案"  @on-ok="savePlan">
       <RadioGroup v-model="radio">
         <Radio label="1" :disabled="waysF">基础方案</Radio>
         <Radio label="2" :disabled="waysF">推荐方案</Radio>
@@ -40,23 +32,19 @@
       <div>治疗结果：</div>
       <Input v-model="complete" type="textarea" :autosize="{minRows: 2,maxRows: 5}"/>
     </Modal>
-
-    <Modal title="查看图片" v-model="visible" style="z-index: 99999;position: absolute">
-      <img :src="'https://o5wwk8baw.qnssl.com/' + imgName + '/large'" v-if="visible" style="width: 100%">
-    </Modal>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import imgUp from '../ut/imgUp.vue';
-  import { ser_Problem, ser_UserProblem } from '../../interface';
+  import { ser_Problem, ser_UserProblem, ser_ProblemSave, ser_findPlan, ser_problemBegin } from '../../interface';
 
   export default {
     name: 'u_questionList',
     components: {imgUp},
     data(){
       return {
-        visible: false,
+        questionID: '',
         complete: '',
         social: [],
         newquestion: '',
@@ -67,10 +55,10 @@
         textarea: '',
         radio: '',
         question: [
-          {key: 'date', title: '添加日期'},
-          {key: 'question', title: '问题描述'},
-          {key: 'resti', title: '决绝方案', render:(h, p)=>{if(p.row.resti === 1){return '基础方案'}else if(p.row.resti === 2 ){return '推荐方案'} else if(p.row.resti === 3 ) {return '最优方案'}else if(p.row.resti === 0 ) {return '未指定'}}},
-          {key: 'status', title: '状态', render:(h, p)=>{if(p.row.status === 1){return '已解决'}else if(p.row.status === 0 ){return '正在解决'}}},
+          {key: 'checkTime', title: '添加日期'},
+          {key: 'description', title: '问题描述'},
+          {key: 'programme', title: '决绝方案', render:(h, p)=>{if(p.row.programme == 1){return '基础方案'}else if(p.row.programme == 2 ){return '推荐方案'} else if(p.row.programme == 3 ) {return '最优方案'}else if(p.row.programme == 0 ) {return '未指定'}}},
+          {key: 'proStatus', title: '状态', render:(h, p)=>{if(p.row.proStatus == 0){return '已解决'}else if(p.row.proStatus == 1 ){return '正在解决'}}},
           {key: 'action', title: '操作', render: (h, params) => {
             return h('div', [
               h('Button', {
@@ -108,26 +96,13 @@
             ]);
           }},
         ],
-        questionData: [
-          {date: '2012-12-12', question: '皮肤暗沉', resti: 1, status: 1, completeDate: '2013-03-12'},
-          {date: '2012-12-12', question: '眼部皮肤松弛', resti: 2, status: 0, completeDate: '未完成'},
-          {date: '2012-12-12', question: '眼袋', resti: 3, status: 1, completeDate: '2013-03-12'},
-          {date: '2012-12-12', question: '黄褐斑', resti: 0, status: 0, completeDate: '未完成'},
-        ],
+        questionData: [],
         questionList: [],
       }
     },
     watch: {
       radio(n, o){
-        if(this.radio == 1){
-          this.textarea = '基础方案';
-        }
-        if(this.radio == 2){
-          this.textarea = '推荐方案';
-        }
-        if(this.radio == 3){
-          this.textarea = '最优方案';
-        }
+        this.getPrData(this.radio)
       },
     },
     created() {
@@ -135,6 +110,20 @@
       this.getList();
     },
     methods: {
+      getPrData (time) {
+        this.$ajax({
+          method: 'GET',
+          dataType: 'JSON',
+          contentType: 'application/json;charset=UTF-8',
+          headers: {
+            "authToken": sessionStorage.getItem('authToken')
+          },
+          url: ser_findPlan()+"?type="+time+"&id="+this.questionID,
+        }).then((res) => {
+          this.textarea = res.data;
+        }).catch((error) => {
+        });
+      },
       getList() {
         this.$ajax({
           method: 'GET',
@@ -162,11 +151,19 @@
         });
       },
       newQuestion() {
-        console.log(this.social);
-      },
-      showImg(img){
-        this.visible = true;
-        this.imgName = img;
+        this.$ajax({
+          method: 'POST',
+          dataType: 'JSON',
+          contentType: 'application/json;charset=UTF-8',
+          headers: {
+            "authToken": sessionStorage.getItem('authToken')
+          },
+          url: ser_ProblemSave(),
+          data: {customerId: this.userID, proids:this.social },
+        }).then((res) => {
+          this.questionData = res.data.results;
+        }).catch((error) => {
+        });
       },
       operating() {
         this.operatingF = true;
@@ -175,13 +172,28 @@
         this.newquestionF = true;
       },
       way(row) {
-        if(row.resti == 0) {
+        this.questionID = row.id;
+        if(row.programme == 0) {
           this.waysF = false;
         } else {
-          this.radio = row.resti;
+          this.radio = row.programme;
           this.waysF = true;
         }
         this.wayf = true;
+      },
+      savePlan() {
+        this.$ajax({
+          method: 'POST',
+          dataType: 'JSON',
+          contentType: 'application/json;charset=UTF-8',
+          headers: {
+            "authToken": sessionStorage.getItem('authToken')
+          },
+          url: ser_problemBegin(),
+          data: {id: this.questionID, programme: this.radio}
+        }).then((res) => {
+        }).catch((error) => {
+        });
       },
     },
   };

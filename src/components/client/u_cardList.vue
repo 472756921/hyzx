@@ -108,7 +108,7 @@
           },
           url: ser_cardList() + '?id=' + uid +"&page="+page+"&pageSize=50",
         }).then((res) => {
-          this.serviceData = res.data.results;
+//          this.cardsData = res.data.results;
         }).catch((error) => {
         });
       },
