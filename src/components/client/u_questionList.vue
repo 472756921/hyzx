@@ -21,17 +21,18 @@
       </RadioGroup>
       <br/>
       <br/>
-      <Input v-model="textarea" type="textarea" :disabled="waysF" :autosize="{minRows: 2,maxRows: 5}"></Input>
+      <Input v-model="textarea" type="textarea" :disabled="waysF" :autosize="{minRows: 2,maxRows: 5}"/>
       <div style="margin: 10px 0">治疗结果：</div>
       <Input v-model="complete" type="textarea" disabled :autosize="{minRows: 2,maxRows: 5}"/>
       <div style="margin: 10px 0">治疗完成时间：</div>
     </Modal>
 
-    <Modal v-model="newquestionF" title="新建问题">
-      <Input v-model="newquestion" type="textarea" :autosize="{minRows: 2,maxRows: 5}"/>
-      <br/>
-      <br/>
-      <imgUp></imgUp>
+    <Modal v-model="newquestionF" title="新建问题" @on-ok="newQuestion">
+      <CheckboxGroup v-model="social">
+        <span v-for="(it, i) in questionList">
+          <Checkbox :label='it.id'>{{it.problem}}</Checkbox>
+        </span>
+      </CheckboxGroup>
     </Modal>
 
     <Modal v-model="operatingF" title="完成疗程">
@@ -48,6 +49,7 @@
 
 <script type="text/ecmascript-6">
   import imgUp from '../ut/imgUp.vue';
+  import { ser_Problem, ser_UserProblem } from '../../interface';
 
   export default {
     name: 'u_questionList',
@@ -56,6 +58,7 @@
       return {
         visible: false,
         complete: '',
+        social: [],
         newquestion: '',
         newquestionF: false,
         operatingF: false,
@@ -111,6 +114,7 @@
           {date: '2012-12-12', question: '眼袋', resti: 3, status: 1, completeDate: '2013-03-12'},
           {date: '2012-12-12', question: '黄褐斑', resti: 0, status: 0, completeDate: '未完成'},
         ],
+        questionList: [],
       }
     },
     watch: {
@@ -126,7 +130,40 @@
         }
       },
     },
+    created() {
+      this.userID = this.$route.params.u_id;
+      this.getList();
+    },
     methods: {
+      getList() {
+        this.$ajax({
+          method: 'GET',
+          dataType: 'JSON',
+          contentType: 'application/json;charset=UTF-8',
+          headers: {
+            "authToken": sessionStorage.getItem('authToken')
+          },
+          url: ser_Problem(),
+        }).then((res) => {
+          this.questionList = res.data;
+        }).catch((error) => {
+        });
+        this.$ajax({
+          method: 'GET',
+          dataType: 'JSON',
+          contentType: 'application/json;charset=UTF-8',
+          headers: {
+            "authToken": sessionStorage.getItem('authToken')
+          },
+          url: ser_UserProblem()+'?id=' + this.userID,
+        }).then((res) => {
+          this.questionData = res.data.results;
+        }).catch((error) => {
+        });
+      },
+      newQuestion() {
+        console.log(this.social);
+      },
       showImg(img){
         this.visible = true;
         this.imgName = img;

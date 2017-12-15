@@ -4,7 +4,7 @@
       <Col span="4">
         <DatePicker type="date" placeholder="选择日期" style="width: 100%" v-model="date"></DatePicker>
       </Col>
-      <Col span="1">
+      <Col span="2">
         <Button class="hy_btn" @click="seacher">查询</Button>
       </Col>
       <Col span="2">

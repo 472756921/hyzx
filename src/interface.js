@@ -103,6 +103,12 @@ export const ser_Problem = function () {
   const API = host + URL;
   return API;
 };
+//获取用户的问题
+export const ser_UserProblem = function () {
+  const URL = '/app/api/customer/findMyProblem';
+  const API = host + URL;
+  return API;
+};
 //----------------------------------------------------------------------------------------
 //服务单列表
 export const ser_list = function () {
@@ -228,3 +234,12 @@ export const re_toOrder = function () {
   const API = host + URL;
   return API;
 };
+// -----------------------------------------------------------------------------
+//日报表
+export const re_day = function () {
+  const URL = '/app/api/report/findDayList';
+  const API = host + URL;
+  return API;
+};
+
+

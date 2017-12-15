@@ -5,7 +5,6 @@
       <TabPane label="店日报" name="name1"><r_day/></TabPane>
       <TabPane label="店月报" name="name2"><r_moth/></TabPane>
       <TabPane label="顾问报表" name="name3"><r_employee/></TabPane>
-      <TabPane label="店长报表" name="name5"><r_manager/></TabPane>
       <TabPane label="考勤表" name="name6"><r_attendance/></TabPane>
     </Tabs>
 
@@ -16,12 +15,11 @@
   import r_day from './r_day.vue';
   import r_moth from './r_moth.vue';
   import r_employee from './r_employee.vue';
-  import r_manager from './r_manager.vue';
   import r_attendance from './r_attendance.vue';
 
   export default {
     name: 'r_index',
-    components: { r_day, r_moth, r_employee, r_manager, r_attendance },
+    components: { r_day, r_moth, r_employee, r_attendance },
 
   };
 </script>

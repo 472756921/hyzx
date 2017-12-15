@@ -1,11 +1,16 @@
 <template>
-  <div>
+  <div style="min-height: 300px">
+    <DatePicker :value="date" format="yyyy年MM月dd日" type="date" placeholder="选择日期" ></DatePicker>
+    <Button class="hy_btn">查询</Button>
+    <br/>
+    <br/>
     <Table :columns="columns" :data="showData"></Table>
-    <Page :current="2" :total="50" simple class="center"></Page>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
+  import { re_day } from '../../interface';
+
   export default {
     name: 'r_day',
     data () {
@@ -47,6 +52,7 @@
           }
         ],
         showData: [],
+        date: '',
         data: [
           {
             r_type: '经营报表',
@@ -57,8 +63,23 @@
     },
     created() {
       this.showData = this.data;
+      this.getList();
     },
     methods: {
+      getList() {
+        this.$ajax({
+          method: 'GET',
+          dataType: 'JSON',
+          contentType: 'application/json;charset=UTF-8',
+          headers: {
+            "authToken": sessionStorage.getItem('authToken')
+          },
+          url: re_day(),
+        }).then((res) => {
+//          this.questionList = res.data;
+        }).catch((error) => {
+        });
+      }
     }
   };
 </script>
