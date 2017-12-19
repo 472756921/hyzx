@@ -291,7 +291,7 @@
             dataType: 'JSON',
             contentType: 'application/json;charset=UTF-8',
             data: {
-              serviceId: this.model2,
+              id: this.model2,
               treatmentMethods: this.model4,
             },
             headers: {
